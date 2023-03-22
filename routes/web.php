@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+<<<<<<< HEAD
 Route::get('/', [HomeController::class, 'index'])->middleware('auth')->name('home');
 
 
@@ -40,6 +41,15 @@ Route::group(['middleware' => ['auth', 'verified', 'role:admin'], 'prefix'=>'adm
     Route::get('posts/{post_id}/comments', [CommentController::class, 'index'])->name('comments.index');
     Route::delete('posts/{post_id}/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
+=======
+Route::get('/', function () {
+    return view('home.index');
+})->middleware('auth')->name('home');
+
+Route::get('/dashboard', function () {
+    return view('dashboard.index');
+})->middleware(['auth', 'verified'])->name('dashboard');
+>>>>>>> 041dc94 (views and routes refactoring)
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -47,6 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/image', [ProfileController::class, 'updateImage'])->name('profile.updateImage');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+<<<<<<< HEAD
 
 Route::middleware('auth')->group(function () {
     Route::post('posts', [PostController::class, 'store']);
@@ -70,3 +81,5 @@ Route::middleware('auth')->group(function () {
     Route::post('friends/{id}/acceptfriend', [FriendController::class, 'acceptFriend'])->name('friends.acceptfriend');
     Route::get('friends', [FriendController::class, 'index'])->name('friends.index');
 });
+=======
+>>>>>>> 041dc94 (views and routes refactoring)
