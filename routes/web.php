@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FriendController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,3 +41,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('comments/{id}/react', [CommentController::class, 'unreact'])->name('comments.unreact');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('persons/pending', [PersonController::class, 'pending'])->name('persons.pending');
+    Route::delete('persons/{id}/cancel', [PersonController::class, 'cancel'])->name('persons.cancel');
+    Route::post('persons/{id}/addfriend', [PersonController::class, 'addfriend'])->name('persons.addfriend');
+    Route::get('persons', [PersonController::class, 'index'])->name('persons.index');
+    Route::get('friends/pending-requests', [FriendController::class, 'pendingRequests'])->name('friends.pending-requests');
+    Route::delete('friends/{id}/unfriend', [FriendController::class, 'unfriend'])->name('friends.unfriend');
+    Route::post('friends/{id}/acceptfriend', [FriendController::class, 'acceptFriend'])->name('friends.acceptfriend');
+    Route::get('friends', [FriendController::class, 'index'])->name('friends.index');
+});

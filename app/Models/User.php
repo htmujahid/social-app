@@ -41,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    /**
+     * Get the posts for the user.
+     */
+    public function friends()
+    {
+        return $this->hasMany(Friend::class);
+    }
 }

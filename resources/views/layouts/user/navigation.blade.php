@@ -15,6 +15,12 @@
                     <x-nav.link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-nav.link>
+                    <x-nav.link :href="route('persons.index')" :active="request()->routeIs('persons.index')">
+                        {{ __('Persons') }}
+                    </x-nav.link>
+                    <x-nav.link :href="route('friends.index')" :active="request()->routeIs('friends.index')">
+                        {{ __('Friends') }}
+                    </x-nav.link>
                 </div>
             </div>
 
@@ -67,8 +73,14 @@
     <!-- Responsive Navigation Menu -->
     <div class="hidden sm:hidden" id="responsive-nav">
         <div class="pt-2 pb-3 space-y-1">
-            <x-nav.responsive-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-nav.responsive-link :href="route('home')" :active="request()->routeIs('home')">
+                {{ __('Home') }}
+            </x-nav.responsive-link>
+            <x-nav.responsive-link :href="route('persons.index')" :active="request()->routeIs('persons.index')">
+                {{ __('Persons') }}
+            </x-nav.responsive-link>
+            <x-nav.responsive-link :href="route('friends.index')" :active="request()->routeIs('friends.index')">
+                {{ __('Friends') }}
             </x-nav.responsive-link>
         </div>
 

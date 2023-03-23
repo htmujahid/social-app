@@ -17,8 +17,13 @@ const app = createApp({});
 
 import PostShow from "./components/Post/Show.vue";
 import PostCreate from "./components/Post/Create.vue";
+import Person from "./components/User/Person.vue";
+import Friend from "./components/User/Friend.vue";
+
 app.component("v-post-show", PostShow);
 app.component("v-post-create", PostCreate);
+app.component("v-person", Person);
+app.component("v-friend", Friend);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
