@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('persons/{id}/cancel', [PersonController::class, 'cancel'])->name('persons.cancel');
     Route::post('persons/{id}/addfriend', [PersonController::class, 'addfriend'])->name('persons.addfriend');
     Route::get('persons', [PersonController::class, 'index'])->name('persons.index');
+    
     Route::get('friends/pending-requests', [FriendController::class, 'pendingRequests'])->name('friends.pending-requests');
     Route::delete('friends/{id}/unfriend', [FriendController::class, 'unfriend'])->name('friends.unfriend');
     Route::post('friends/{id}/acceptfriend', [FriendController::class, 'acceptFriend'])->name('friends.acceptfriend');
