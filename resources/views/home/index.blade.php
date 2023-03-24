@@ -27,6 +27,7 @@
                 <div>
                     <v-post-show 
                         :post_id="{{ $post->id }}"
+                        :post_user_id="{{ $post->user->id }}"
                         :user_name="{{ json_encode($post->user->name) }}"
                         :post_created_at="{{ json_encode($post->created_at) }}"
                         :post_content="{{ json_encode($post->content) }}"
