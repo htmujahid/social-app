@@ -61,9 +61,11 @@ class FriendController extends Controller
      */
     public function unfriend(string $id)
     {
-        $friend = Friend::where('user_id', auth()->id())
-            ->where('friend_id', $id)
-            ->first();
+        $friend = Friend::where('user_id', auth()->id())->where('friend_id', $id)->first();
+
+        if (!$friend) {
+            $friend = Friend::where('user_id', $id)->where('friend_id', auth()->id())->first();
+        }
 
         $friend->delete();
 
