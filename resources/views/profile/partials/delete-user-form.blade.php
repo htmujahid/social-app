@@ -9,12 +9,9 @@
         </p>
     </header>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+    <x-button.danger id="delete-user-button">{{ __('Delete Account') }}</x-button.danger>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
+    <x-modal.index name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable :messages="$errors->userDeletion->get('password')">
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
             @csrf
             @method('delete')
@@ -28,28 +25,28 @@
             </p>
 
             <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                <x-input.label for="password" value="{{ __('Password') }}" class="sr-only" />
 
-                <x-text-input
+                <x-input.index
                     id="password"
                     name="password"
                     type="password"
-                    class="mt-1 block w-3/4"
+                    class="mt-1 block w-full"
                     placeholder="{{ __('Password') }}"
                 />
 
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                <x-input.error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
+                <x-button.secondary id="cancel-user-deletion-button">
                     {{ __('Cancel') }}
-                </x-secondary-button>
+                </x-button.secondary>
 
-                <x-danger-button class="ml-3">
+                <x-button.danger class="ml-3" >
                     {{ __('Delete Account') }}
-                </x-danger-button>
+                </x-button.danger>
             </div>
         </form>
-    </x-modal>
+    </x-modal.index>
 </section>
