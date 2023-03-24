@@ -12,8 +12,23 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav.link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav.link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav.link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav.link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
+                        {{ __('Users') }}
+                    </x-nav.link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav.link :href="route('admin.posts.index')" :active="request()->routeIs('admin.posts.index')">
+                        {{ __('Posts') }}
+                    </x-nav.link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav.link :href="route('admin.comments.index', '_')" :active="request()->routeIs('admin.comments.index')">
+                        {{ __('Commments') }}
                     </x-nav.link>
                 </div>
             </div>
@@ -67,8 +82,23 @@
     <!-- Responsive Navigation Menu -->
     <div class="hidden sm:hidden" id="responsive-nav">
         <div class="pt-2 pb-3 space-y-1">
-            <x-nav.responsive-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-nav.responsive-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                 {{ __('Dashboard') }}
+            </x-nav.responsive-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-nav.responsive-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
+                {{ __('Users') }}
+            </x-nav.responsive-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-nav.responsive-link :href="route('admin.posts.index')" :active="request()->routeIs('admin.posts.index')">
+                {{ __('Posts') }}
+            </x-nav.responsive-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-nav.responsive-link :href="route('admin.comments.index', '_')" :active="request()->routeIs('admin.comments.index')">
+                {{ __('Commments') }}
             </x-nav.responsive-link>
         </div>
 

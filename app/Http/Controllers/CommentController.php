@@ -11,17 +11,26 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(String $id)
     {
-        //
-    }
+        $query = request()->query();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        if ($id == '_') {
+            if (isset($query['user_id'])) {
+                $comments = PostComment::where('user_id', $query['user_id'])->get();
+            } else {
+                $comments = PostComment::all();
+            }
+        } else {
+            if (isset($query['user_id'])) {
+                $comments = PostComment::where('user_id', $query['user_id'])->where('post_id', $id)->get();
+            } else {
+                $comments = PostComment::where('post_id', $id)->get();
+            }
+        }
+        return view('posts.comments.index', [
+            'comments' => $comments,
+        ]);
     }
 
     /**
@@ -39,35 +48,12 @@ class CommentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $postId, string $id)
     {
-        //
+        PostComment::destroy($id);
+        return redirect()->route('admin.comments.index', ['_']);
     }
 
     /**

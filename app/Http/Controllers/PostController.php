@@ -16,7 +16,17 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $query = request()->query();
+        
+        if (isset($query['user_id'])) {
+            $posts = Post::where('user_id', $query['user_id'])->with('user', 'postMedia', 'postStats', 'postReacts')->get();
+        }
+        else {
+            $posts = Post::with('user', 'postMedia', 'postStats', 'postReacts')->get();
+        }
+        return view('posts.index', [
+            'posts' => $posts,
+        ]);
     }
 
     /**
@@ -88,7 +98,8 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Post::destroy($id);
+        return redirect()->route('admin.posts.index');
     }
 
     /**
