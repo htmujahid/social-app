@@ -31,7 +31,11 @@
                     </p>
                 </div>
             </div>
-            <button>
+            <button
+                @click="deletePost"
+                v-show="post_user_id === current_user_id"
+                class="focus:outline-none"
+            >
                 <DeleteIcon />
             </button>
         </div>
@@ -132,6 +136,10 @@ export default {
     },
     props: {
         post_id: {
+            type: Number,
+            required: true,
+        },
+        post_user_id: {
             type: Number,
             required: true,
         },
@@ -272,6 +280,15 @@ export default {
                         console.log(err);
                     });
             }
+        },
+
+        deletePost() {
+            axios
+                .delete(`/posts/${this.post_id}`)
+                .then(() => {})
+                .catch((err) => {
+                    console.log(err);
+                });
         },
     },
 };

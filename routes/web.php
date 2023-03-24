@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('posts', [PostController::class, 'store']);
     Route::post('comments', [CommentController::class, 'store']);
+    Route::delete('posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::post('posts/{id}/react', [PostController::class, 'react'])->name('posts.react');
     Route::delete('posts/{id}/react', [PostController::class, 'unreact'])->name('posts.unreact');
     Route::post('posts/{id}/stat', [PostController::class, 'stat'])->name('posts.stat');

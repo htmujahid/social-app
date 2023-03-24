@@ -98,8 +98,15 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        Post::destroy($id);
-        return redirect()->route('admin.posts.index');
+        if (auth()->user()->role == 'admin') {
+            Post::destroy($id);
+            return redirect()->route('admin.posts.index');
+        }
+        if (auth()->user()->id == Post::find($id)->user_id){
+            Post::destroy($id);
+            return redirect()->route('home');
+        }
+        
     }
 
     /**
