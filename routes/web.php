@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,10 +25,20 @@ Route::get('/', [HomeController::class, 'index'])->middleware('auth')->name('hom
 
 
 
-Route::group(['middleware' => ['auth', 'verified', 'role:admin']], function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard');
+Route::group(['middleware' => ['auth', 'verified', 'role:admin'], 'prefix'=>'admin', 'as'=>'admin.'], function () {
+
+    Route::redirect('/', '/admin/dashboard', 301);
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+    Route::delete('posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    Route::get('posts/{post_id}/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::delete('posts/{post_id}/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 Route::middleware('auth')->group(function () {
@@ -36,8 +48,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resource('posts', PostController::class);
-    Route::resource('comments', CommentController::class);
+    Route::post('posts', [PostController::class, 'store']);
+    Route::post('comments', [CommentController::class, 'store']);
     Route::post('posts/{id}/react', [PostController::class, 'react'])->name('posts.react');
     Route::delete('posts/{id}/react', [PostController::class, 'unreact'])->name('posts.unreact');
     Route::post('posts/{id}/stat', [PostController::class, 'stat'])->name('posts.stat');

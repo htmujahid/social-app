@@ -24,4 +24,10 @@ class PostComment extends Model
     {
         return $this->hasMany(PostCommentReact::class);
     }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+
 }
