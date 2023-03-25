@@ -9,7 +9,7 @@ To install and set up the Social App on your local machine, follow these steps:
 Clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/your-username/social-app.git
+git clone https://github.com/htmujahid/social-app.git
 ```
 Install PHP dependencies via Composer:
 ```bash
