@@ -49,11 +49,13 @@
                                     </a>
                                 </x-table.td>
                                 <x-table.td>
-                                    <form action="{{ route('admin.users.destroy', $user->id)}}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="font-medium text-blue-600 hover:underline" type="submit">Delete</button>
-                                    </form>
+                                    @if (auth()->user()->id != $user->id)
+                                        <form action="{{ route('admin.users.destroy', $user->id)}}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="font-medium text-blue-600 hover:underline" type="submit">Delete</button>
+                                        </form>
+                                    @endif
                                 </x-table.td>
                             </x-table.tr>
                         @endforeach
