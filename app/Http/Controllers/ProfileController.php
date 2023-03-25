@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+use App\Models\UserMedia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -16,8 +19,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = User::with('userMedia')->where('id', $request->user()->id)->first();
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 
@@ -35,6 +40,38 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Update the user's image.
+     */
+    public function updateImage(Request $request): RedirectResponse
+    {
+        $userMedia = UserMedia::where('user_id', $request->user()->id)->first();
+
+        if ($userMedia) {
+            // delete the old image
+            $path = $userMedia->path;
+            $disk = Storage::disk('public');
+            if ($disk->exists($path)) {
+                $disk->delete($path);
+            }
+
+            $userMedia->delete();
+        }
+
+        $file = $request->file('user-media');
+
+        $path = $file->store('users', 'public');
+        
+        UserMedia::create(
+            [
+                'user_id' => $request->user()->id,
+                'path' => $path,
+            ]
+        );
+
+        return Redirect::route('profile.edit')->with('status', 'profile-image-updated');
     }
 
     /**

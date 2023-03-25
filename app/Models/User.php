@@ -66,4 +66,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(PostComment::class);
     }
+
+    /**
+     * Get the user media for the user.
+     */
+    public function userMedia()
+    {
+        return $this->hasMany(UserMedia::class);
+    }
+
 }

@@ -17,10 +17,7 @@
         @csrf
         @method('patch')
 
-        <div>
-            <x-input.label for="photo" :value="__('Photo')" />
-            <x-input.index id="photo" name="photo" type="file" class="mt-1 block w-full" />
-        </div>
+        <div id="user-media-preview"></div>
 
         <div>
             <x-input.label for="name" :value="__('Name')" />
