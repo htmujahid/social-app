@@ -12,19 +12,17 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-<<<<<<< HEAD:resources/views/layouts/user/navigation.blade.php
                     <x-nav.link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Home') }}
+                    </x-nav.link>
+                    <x-nav.link :href="route('user.posts', 'my')" :active="request()->routeIs('user.posts', 'my')">
+                        {{ __('My Posts') }}
                     </x-nav.link>
                     <x-nav.link :href="route('persons.index')" :active="request()->routeIs('persons.index')">
                         {{ __('Persons') }}
                     </x-nav.link>
                     <x-nav.link :href="route('friends.index')" :active="request()->routeIs('friends.index')">
                         {{ __('Friends') }}
-=======
-                    <x-nav.link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
->>>>>>> 041dc94 (views and routes refactoring):resources/views/layouts/navigation.blade.php
                     </x-nav.link>
                 </div>
             </div>
@@ -78,19 +76,17 @@
     <!-- Responsive Navigation Menu -->
     <div class="hidden sm:hidden" id="responsive-nav">
         <div class="pt-2 pb-3 space-y-1">
-<<<<<<< HEAD:resources/views/layouts/user/navigation.blade.php
             <x-nav.responsive-link :href="route('home')" :active="request()->routeIs('home')">
                 {{ __('Home') }}
+            </x-nav.responsive-link>
+            <x-nav.responsive-link :href="route('user.posts', 'my')" :active="request()->routeIs('user.posts', 'my')">
+                {{ __('My Posts') }}
             </x-nav.responsive-link>
             <x-nav.responsive-link :href="route('persons.index')" :active="request()->routeIs('persons.index')">
                 {{ __('Persons') }}
             </x-nav.responsive-link>
             <x-nav.responsive-link :href="route('friends.index')" :active="request()->routeIs('friends.index')">
                 {{ __('Friends') }}
-=======
-            <x-nav.responsive-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
->>>>>>> 041dc94 (views and routes refactoring):resources/views/layouts/navigation.blade.php
             </x-nav.responsive-link>
         </div>
 

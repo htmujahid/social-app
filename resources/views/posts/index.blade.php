@@ -45,7 +45,7 @@
                                     {{ $post->postStats->count() }}
                                 </x-table.td>
                                 <x-table.td>
-                                    <form action="{{ route('admin.posts.destroy', $post->id)}}" method="delete">
+                                    <form action="{{ route('admin.posts.destroy', $post->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="font-medium text-blue-600 hover:underline" type="submit">Delete</button>

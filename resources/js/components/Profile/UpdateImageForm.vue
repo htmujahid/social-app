@@ -15,7 +15,7 @@
                 id="user-media-preview"
                 ref="userMediaPreview"
                 class="max-w-32 max-h-32 rounded-full"
-                :src="'/storage/' + user.user_media[0].path"
+                :src="'/storage/' + user_media_path"
             />
             <div>
                 <label
@@ -58,6 +58,13 @@ export default {
             type: Object,
             required: true,
         },
+    },
+    data() {
+        return {
+            user_media_path: this.user.user_media[0]
+                ? this.user.user_media[0].path
+                : "default.jpg",
+        };
     },
     methods: {
         previewImage() {

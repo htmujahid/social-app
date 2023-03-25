@@ -12,7 +12,7 @@
         <div class="rounded-lg bg-gray-100 p-2">
             <div class="flex gap-2 items-start space-x-2">
                 <img
-                    src="https://via.placeholder.com/50"
+                    :src="'/storage/' + user_media_path"
                     alt="User avatar"
                     class="h-9 w-9 rounded-full"
                 />
@@ -72,6 +72,9 @@ export default {
                     react.type === "downvote" &&
                     react.user_id === this.current_user_id
             ).length,
+            user_media_path: this.comment.user.user_media[0]
+                ? this.comment.user.user_media[0].path
+                : "users/default.jpg",
         };
     },
     methods: {
