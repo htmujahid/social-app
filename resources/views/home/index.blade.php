@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <x-user-layout>
     <div class="relative bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white">
 
