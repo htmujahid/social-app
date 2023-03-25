@@ -63,7 +63,7 @@ export default {
         return {
             user_media_path: this.user.user_media[0]
                 ? this.user.user_media[0].path
-                : "default.jpg",
+                : "users/default.jpg",
         };
     },
     methods: {
