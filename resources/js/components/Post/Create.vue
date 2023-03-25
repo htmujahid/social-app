@@ -60,11 +60,11 @@ export default {
     },
     methods: {
         previewMedia() {
-            const post_media = document.getElementById("post-media");
+            const postMedia = document.getElementById("post-media");
             const preview = document.getElementById("post-media-preview");
 
-            for (let i = 0; i < post_media.files.length; i++) {
-                const file = post_media.files[i];
+            for (let i = 0; i < postMedia.files.length; i++) {
+                const file = postMedia.files[i];
                 const reader = new FileReader();
 
                 this.media.push(file);
