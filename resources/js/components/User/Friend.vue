@@ -3,8 +3,16 @@
         <div
             class="px-4 py-2 flex flex-col sm:flex-row gap-2 sm:gap-4 sm:h-24 items-center justify-between"
         >
-            <div class="h-20 w-20 rounded-full bg-gray-300"></div>
-            <div class="font-bold text-lg">{{ friend.name }}</div>
+            <div class="h-20 w-20 rounded-full bg-gray-300">
+                <img
+                    class="h-full w-full rounded-full object-cover"
+                    :src="'/storage/' + user_media_path"
+                    :alt="friend.name"
+                />
+            </div>
+            <a :href="'/' + friend.id + '/posts'">
+                <div class="font-bold text-lg">{{ friend.name }}</div>
+            </a>
             <div class="flex-1 hidden sm:block"></div>
             <div class="">
                 <button
@@ -38,6 +46,13 @@ export default {
             type: String,
             required: false,
         },
+    },
+    data() {
+        return {
+            user_media_path: this.friend.user_media[0]
+                ? this.friend.user_media[0].path
+                : "users/default.jpg",
+        };
     },
     methods: {
         confirmFriend() {

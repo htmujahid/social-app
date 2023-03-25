@@ -15,6 +15,9 @@
                     <x-nav.link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-nav.link>
+                    <x-nav.link :href="route('user.posts', 'my')" :active="request()->routeIs('user.posts', 'my')">
+                        {{ __('My Posts') }}
+                    </x-nav.link>
                     <x-nav.link :href="route('persons.index')" :active="request()->routeIs('persons.index')">
                         {{ __('Persons') }}
                     </x-nav.link>
@@ -75,6 +78,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-nav.responsive-link :href="route('home')" :active="request()->routeIs('home')">
                 {{ __('Home') }}
+            </x-nav.responsive-link>
+            <x-nav.responsive-link :href="route('user.posts', 'my')" :active="request()->routeIs('user.posts', 'my')">
+                {{ __('My Posts') }}
             </x-nav.responsive-link>
             <x-nav.responsive-link :href="route('persons.index')" :active="request()->routeIs('persons.index')">
                 {{ __('Persons') }}

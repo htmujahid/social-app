@@ -2,11 +2,13 @@
 
 namespace App\Actions\Install;
 use Illuminate\Support\Facades\Artisan;
+use Dotenv\Dotenv;
 
 class SuperAdmin
 {
     public function execute()
     {
+        Dotenv::createImmutable(base_path())->load();
         $this->createSuperAdmin();
     }
 
