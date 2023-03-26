@@ -6,6 +6,9 @@ use App\Actions\Post\CreatePost;
 use App\Actions\Post\DeletePost;
 use App\Actions\Post\GetUserPosts;
 use App\Actions\Post\GetPosts;
+use App\Actions\Post\ReactPost;
+use App\Actions\Post\SetPostStat;
+use App\Actions\Post\UnreactPost;
 use App\Models\PostReact;
 use App\Models\PostStat;
 use Illuminate\Http\Request;
@@ -54,13 +57,8 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = (new DeletePost())->execute($id);
-
-        if (request()->routeIs('home')) {
-            return redirect()->route('home');
-        } else {
-            return redirect()->route('admin.posts.index');
-        }
-
+        
+        return $post;
     }
 
     /**
@@ -68,13 +66,7 @@ class PostController extends Controller
      */
     public function react(Request $request, string $id)
     {
-        PostReact::create(
-            [
-                'post_id' => $id,
-                'user_id' => $request->user()->id,
-                'type' => $request->input('type'),
-            ]
-        );
+        $post_react = (new ReactPost())->execute($request, $id);
     }
 
     /**
@@ -82,7 +74,7 @@ class PostController extends Controller
      */
     public function unreact(Request $request, string $id)
     {
-        PostReact::where('post_id', $id)->where('user_id', $request->user()->id)->delete();
+        $post_unreact = (new UnreactPost())->execute($request, $id);
     }
     
     /**
@@ -91,11 +83,6 @@ class PostController extends Controller
     public function stat(Request $request, string $id)
     {
 
-        PostStat::create(
-            [
-                'post_id' => $id,
-                'user_id' => $request->user()->id,
-            ]
-        );
+        $post_stat = (new SetPostStat())->execute($request, $id);
     }
 }

@@ -10,7 +10,7 @@
                 >
                     <img
                         :src="'/storage/' + user_media_path"
-                        class="h-12 w-12 rounded-full"
+                        class="h-12 w-12 rounded-full bg-gray-300 object-cover"
                     />
                 </div>
                 <div>
@@ -93,13 +93,20 @@
             </div>
         </div>
         <div class="mt-3 flex flex-col gap-2" v-show="isCommentsActive">
-            <template v-for="comment in post_comments" :key="comment.id">
+            <template
+                v-for="comment in current_post_comments"
+                :key="comment.id"
+            >
                 <Comment
                     :comment="comment"
                     :current_user_id="current_user_id"
                 />
             </template>
-            <CreateComment :post_id="post_id" />
+            <CreateComment
+                :post_id="post_id"
+                :current_user_id="current_user_id"
+                @comment-created="commentCreated"
+            />
         </div>
     </div>
 </template>
@@ -113,6 +120,7 @@ import StatsIcon from "../Icons/Stats.vue";
 import DeleteIcon from "../Icons/Delete.vue";
 import LeftArrowIcon from "../Icons/Left.vue";
 import RightArrowIcon from "../Icons/Right.vue";
+import axios from "axios";
 
 export default {
     components: {
@@ -189,6 +197,7 @@ export default {
             likeCount: this.post_likes.length,
             statCount: this.post_stats.length,
             observer: null,
+            current_post_comments: this.post_comments,
         };
     },
     mounted() {
@@ -283,10 +292,16 @@ export default {
         deletePost() {
             axios
                 .delete(`/posts/${this.post_id}`)
-                .then(() => {})
+                .then(() => {
+                    window.location.reload();
+                })
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+
+        commentCreated() {
+            window.location.reload();
         },
     },
 };

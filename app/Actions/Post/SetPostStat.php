@@ -2,18 +2,16 @@
 
 namespace App\Actions\Post;
 
-use App\Models\Post;
-use App\Models\PostReact;
+use App\Models\PostStat;
 
-class ReactPost
+class SetPostStat
 {
     public function execute($request, $id)
     {
-        return PostReact::create(
+        return PostStat::create(
             [
                 'post_id' => $id,
                 'user_id' => $request->user()->id,
-                'type' => $request->input('type'),
             ]
         );
     }

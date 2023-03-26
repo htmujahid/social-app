@@ -9,7 +9,6 @@ class UnreactPost
 {
     public function execute($request, $id)
     {
-        $post = Post::find($id);
-        $post->reacts()->where('user_id', $request->user()->id)->delete();
+        return PostReact::where('post_id', $id)->where('user_id', $request->user()->id)->delete();
     }
 }

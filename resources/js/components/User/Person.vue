@@ -5,7 +5,7 @@
         >
             <div class="h-20 w-20 rounded-full bg-gray-300">
                 <img
-                    class="h-full w-full rounded-full object-cover"
+                    class="h-full w-full rounded-full bg-gray-300 object-cover"
                     :src="'/storage/' + user_media_path"
                     :alt="person.name"
                 />
@@ -59,7 +59,9 @@ export default {
         addFriend() {
             axios
                 .post(`/persons/${this.person.id}/addfriend`)
-                .then(() => {})
+                .then(() => {
+                    window.location.reload();
+                })
                 .catch((error) => {
                     console.log(error);
                 });
@@ -67,7 +69,9 @@ export default {
         cancelRequest() {
             axios
                 .delete(`/persons/${this.person.id}/cancel`)
-                .then(() => {})
+                .then(() => {
+                    window.location.reload();
+                })
                 .catch((error) => {
                     console.log(error);
                 });

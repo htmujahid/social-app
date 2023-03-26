@@ -14,7 +14,7 @@
                 <img
                     :src="'/storage/' + user_media_path"
                     alt="User avatar"
-                    class="h-9 w-9 rounded-full"
+                    class="h-9 w-9 rounded-full bg-gray-300 object-cover"
                 />
                 <div class="">
                     <p class="font-medium text-sm">

@@ -29,7 +29,7 @@ class PersonController extends Controller
     {
         $friend = (new AddPerson())->execute($id);
 
-        return redirect()->route('persons.index');
+        return $friend;
     }
 
     /**
@@ -51,6 +51,6 @@ class PersonController extends Controller
     {
         $friend = (new CancelPendingPerson())->execute($id);
 
-        return redirect()->route('persons.index');
+        return $friend;
     }
 }

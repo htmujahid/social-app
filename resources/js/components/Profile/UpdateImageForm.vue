@@ -14,7 +14,7 @@
             <img
                 id="user-media-preview"
                 ref="userMediaPreview"
-                class="max-w-32 max-h-32 rounded-full"
+                class="w-32 h-32 rounded-full bg-gray-300 object-cover"
                 :src="'/storage/' + user_media_path"
             />
             <div>
@@ -70,10 +70,10 @@ export default {
         previewImage() {
             const file = this.$refs.userMedia.files[0];
             const reader = new FileReader();
-
             reader.addEventListener(
                 "load",
                 () => {
+                    this.$refs.userMediaError.textContent = "";
                     this.$refs.userMediaPreview.src = reader.result;
                 },
                 false
@@ -98,7 +98,9 @@ export default {
 
             axios
                 .post("/profile/image", formData)
-                .then(() => {})
+                .then(() => {
+                    window.location.reload();
+                })
                 .catch((error) => {
                     console.log(error);
                 });

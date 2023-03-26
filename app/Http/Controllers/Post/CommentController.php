@@ -23,7 +23,7 @@ class CommentController extends Controller
             'comments' => $comments,
         ]);
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +32,7 @@ class CommentController extends Controller
 
         $comment = (new CreateComment())->execute($request);
 
-        return redirect()->route('admin.comments.index', ['_']);
+        return $comment;
     }
 
     /**
@@ -62,7 +62,7 @@ class CommentController extends Controller
     {
         $unreact = (new UnreactComment())->execute($request, $id);
 
-        return redirect()->route('home', ['_']);
+        return $unreact;
     }
 
 }

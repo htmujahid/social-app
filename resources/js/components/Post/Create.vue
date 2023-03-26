@@ -2,7 +2,7 @@
     <div
         class="duration-250 scale-100 rounded-lg border bg-white from-gray-700/50 via-transparent px-6 pt-6 pb-3 shadow-2xl shadow-gray-500/20 transition-all focus:outline focus:outline-2 focus:outline-red-500 motion-safe:hover:scale-[1.01]"
     >
-        <form @submit="storePost">
+        <form @submit.prevent="storePost">
             <textarea
                 name="post-content"
                 id="post-content"
@@ -98,9 +98,6 @@ export default {
             return true;
         },
         storePost() {
-            const postMedia = document.getElementById("post-media");
-            const preview = document.getElementById("post-media-preview");
-
             if (!this.validatePost()) {
                 this.validationError = true;
                 setInterval(() => {
@@ -122,10 +119,7 @@ export default {
                     },
                 })
                 .then(() => {
-                    this.content = "";
-                    this.media = [];
-                    postMedia.value = "";
-                    preview.innerHTML = "";
+                    window.location.reload();
                 })
                 .catch((error) => {
                     alert(error.response.data.message);

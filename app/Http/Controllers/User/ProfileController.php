@@ -61,6 +61,10 @@ class ProfileController extends Controller
             $userMedia->delete();
         }
 
+        $request->validate([
+            'user-media' => ['required', 'image', 'max:1024'],
+        ]);
+
         $file = $request->file('user-media');
 
         $path = $file->store('users', 'public');

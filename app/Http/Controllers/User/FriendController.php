@@ -43,7 +43,7 @@ class FriendController extends Controller
     {
         $friend = (new Unfriend())->execute($id);
 
-        return redirect()->route('friends.index');
+        return $friend;
     }
 
     /**
@@ -53,7 +53,7 @@ class FriendController extends Controller
     {
         $friend = (new AcceptFriend())->execute($id);
 
-        return redirect()->route('friends.index');
+        return $friend;
     }
 
 }
