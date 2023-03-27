@@ -41,7 +41,7 @@ Start the development server:
 ```bash
 php artisan serve
 ```
-Visit http://localhost:8000 in your web browser to see the Social App in action.
+Visit http://localhost:8000 in your web browser to see the Social App in action. For accessing admin panel with admin role, you can access it on http://localhost:8000/admin
 
 ## Features:
 
