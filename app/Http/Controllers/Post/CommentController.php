@@ -42,7 +42,7 @@ class CommentController extends Controller
     {
         $comment = (new DeleteComment())->execute($id);
 
-        return redirect()->route('admin.comments.index', ['_']);
+        return $comment;
     }
 
     /**

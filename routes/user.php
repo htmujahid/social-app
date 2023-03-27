@@ -37,6 +37,7 @@ Route::delete('posts/{id}/react', [PostController::class, 'unreact'])->name('pos
 Route::post('posts/{id}/stat', [PostController::class, 'stat'])->name('posts.stat');
 Route::post('comments/{id}/react', [CommentController::class, 'react'])->name('comments.react');
 Route::delete('comments/{id}/react', [CommentController::class, 'unreact'])->name('comments.unreact');
+Route::delete('posts/{post_id}/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 // persons connections handling
 Route::get('persons/pending', [PersonController::class, 'pending'])->name('persons.pending');
 Route::delete('persons/{id}/cancel', [PersonController::class, 'cancel'])->name('persons.cancel');

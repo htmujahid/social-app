@@ -9,8 +9,11 @@ class DeleteComment
 {
     public function execute($id)
     {
-        PostCommentReact::where('post_comment_id', $id)->delete();
-        
-        return PostComment::destroy($id);
+        if ( auth()->user()->hasRole('admin') || auth()->user()->id == PostComment::find($id)->user_id) {
+            PostCommentReact::where('post_comment_id', $id)->delete();
+            
+            return PostComment::destroy($id);
+        }
+        return false;
     }
 }

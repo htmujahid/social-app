@@ -1,5 +1,9 @@
 <template>
-    <div class="flex gap-2">
+    <div
+        class="flex gap-2 w-fit"
+        @mouseenter="showDeleteButton = true"
+        @mouseleave="showDeleteButton = false"
+    >
         <div class="flex flex-col text-gray-500">
             <button class="" @click="upvote">
                 <UpvoteIcon :active="!!isUpvoted" />
@@ -9,7 +13,7 @@
                 <DownvoteIcon :active="!!isDownvoted" />
             </button>
         </div>
-        <div class="rounded-lg bg-gray-100 p-2">
+        <div class="rounded-lg bg-gray-100 p-2 relative">
             <div class="flex gap-2 items-start space-x-2">
                 <img
                     :src="'/storage/' + user_media_path"
@@ -30,18 +34,27 @@
                     {{ comment.content }}
                 </p>
             </div>
+            <button
+                class="absolute -bottom-1 -left-2"
+                @click="deleteComment"
+                v-show="showDeleteButton && comment.user_id === current_user_id"
+            >
+                <DeleteIcon />
+            </button>
         </div>
     </div>
 </template>
 <script>
 import UpvoteIcon from "../Icons/Upvote.vue";
 import DownvoteIcon from "../Icons/Downvote.vue";
+import DeleteIcon from "../Icons/Delete.vue";
 import axios from "axios";
 
 export default {
     components: {
         UpvoteIcon,
         DownvoteIcon,
+        DeleteIcon,
     },
     props: {
         comment: {
@@ -49,6 +62,10 @@ export default {
             required: true,
         },
         current_user_id: {
+            type: Number,
+            required: true,
+        },
+        post_id: {
             type: Number,
             required: true,
         },
@@ -75,6 +92,7 @@ export default {
             user_media_path: this.comment.user.user_media[0]
                 ? this.comment.user.user_media[0].path
                 : "users/default.jpg",
+            showDeleteButton: false,
         };
     },
     methods: {
@@ -133,6 +151,16 @@ export default {
                     });
             }
             this.isDownvoted = !this.isDownvoted;
+        },
+        deleteComment() {
+            axios
+                .delete(`posts/${this.post_id}/comments/${this.comment.id}`)
+                .then(() => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         },
     },
 };

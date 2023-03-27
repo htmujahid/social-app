@@ -100,6 +100,7 @@
                 <Comment
                     :comment="comment"
                     :current_user_id="current_user_id"
+                    :post_id="post_id"
                 />
             </template>
             <CreateComment
