@@ -19,6 +19,7 @@
                     class="bg-blue-500 rounded-xl px-4 py-2 font-medium text-white"
                     @click="confirmFriend"
                     v-if="card_type == 'confirm'"
+                    ref="confirmButton"
                 >
                     Confirm
                 </button>
@@ -26,6 +27,7 @@
                     class="bg-red-500 rounded-xl px-4 py-2 font-medium text-white"
                     @click="removeFriend"
                     v-else
+                    ref="removeButton"
                 >
                     Remove
                 </button>
@@ -59,7 +61,8 @@ export default {
             axios
                 .post(`/friends/${this.friend.id}/acceptfriend`)
                 .then(() => {
-                    window.location.reload();
+                    this.$refs.confirmButton.innerText = "Friends";
+                    this.$refs.confirmButton.disabled = true;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -69,7 +72,8 @@ export default {
             axios
                 .delete(`/friends/${this.friend.id}/unfriend`)
                 .then(() => {
-                    window.location.reload();
+                    this.$refs.removeButton.innerText = "Removed";
+                    this.$refs.removeButton.disabled = true;
                 })
                 .catch((error) => {
                     console.log(error);

@@ -25,7 +25,7 @@ function toggleTab(tab) {
     <UserLayout>
         <div class="mx-auto grid max-w-2xl grid-cols-1 gap-y-4 p-6 lg:p-8">
             <div
-                class="flex items-center w-full text-center rounded-lg overflow-hidden border"
+                class="flex flex-col sm:flex-row items-center w-full text-center rounded-lg overflow-hidden border"
             >
                 <div class="w-full">
                     <button

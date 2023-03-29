@@ -18,7 +18,8 @@
                 <button
                     class="bg-red-500 rounded-xl px-4 py-2 font-medium text-white"
                     @click="cancelRequest"
-                    v-if="person_type == 'cancel'"
+                    v-if="card_type == 'cancel'"
+                    ref="cancelButton"
                 >
                     Cancel Request
                 </button>
@@ -26,6 +27,7 @@
                     class="bg-blue-500 rounded-xl px-4 py-2 font-medium text-white"
                     @click="addFriend"
                     v-else
+                    ref="addButton"
                 >
                     Add Friend
                 </button>
@@ -42,7 +44,7 @@ export default {
             type: Object,
             required: true,
         },
-        person_type: {
+        card_type: {
             type: String,
             required: false,
         },
@@ -59,7 +61,8 @@ export default {
             axios
                 .post(`/persons/${this.person.id}/addfriend`)
                 .then(() => {
-                    window.location.reload();
+                    this.$refs.addButton.innerText = "Request Sent";
+                    this.$refs.addButton.disabled = true;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -69,7 +72,8 @@ export default {
             axios
                 .delete(`/persons/${this.person.id}/cancel`)
                 .then(() => {
-                    window.location.reload();
+                    this.$refs.cancelButton.innerText = "Request Cancelled";
+                    this.$refs.cancelButton.disabled = true;
                 })
                 .catch((error) => {
                     console.log(error);

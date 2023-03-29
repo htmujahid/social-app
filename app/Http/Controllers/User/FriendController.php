@@ -28,18 +28,6 @@ class FriendController extends Controller
     }
 
     /**
-     * Display a pending request of the resource.
-     */
-    public function pendingRequests()
-    {
-        $pending_friend_requests = (new GetUnrespondedRequests())->execute();
-
-        return view('users.friends', [
-            'friends' => $pending_friend_requests,
-        ]);
-    }
-
-    /**
      * delete of the requested resource.
      */
     public function unfriend(string $id)

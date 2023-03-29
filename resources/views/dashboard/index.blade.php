@@ -5,13 +5,13 @@
                 User of Week: {{ $userOfWeek->name }}
             </div>
             <div class="relative overflow-x-auto shadow-md bg-white sm:rounded-lg p-4">
-                Total Users: {{ $users->count() }}                
+                Total Users: {{ $users_count }}                
             </div>
             <div class="relative overflow-x-auto shadow-md bg-white sm:rounded-lg p-4">
-                Total Posts: {{ $posts->count() }}           
+                Total Posts: {{ $posts_count }}           
             </div>
             <div class="relative overflow-x-auto shadow-md bg-white sm:rounded-lg p-4">
-                Total Comments: {{ $comments->count() }}
+                Total Comments: {{ $comments_count }}
             </div>
 
         </div>

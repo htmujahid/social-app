@@ -36,18 +36,6 @@ class PersonController extends Controller
     }
 
     /**
-     * Show the pending friends.
-     */
-    public function pending()
-    {
-        $persons = (new GetPendingPersons())->execute();
-
-        return view('users.persons',[
-            'persons' => $persons,
-        ]);
-    }
-
-    /**
      * delete the requested resource
      */
     public function cancel(string $id)
