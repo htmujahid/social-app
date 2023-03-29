@@ -54,7 +54,7 @@ defineProps({
                                             "
                                             class="font-medium text-blue-600 hover:underline"
                                         >
-                                            <!-- {{ user.posts.count() }} -->
+                                            {{ user.posts.length }}
                                         </a>
                                     </Td>
                                     <Td>
@@ -67,7 +67,7 @@ defineProps({
                                             "
                                             class="font-medium text-blue-600 hover:underline"
                                         >
-                                            <!-- {{ user.postComments.count() }} -->
+                                            {{ user.post_comments.length }}
                                         </a>
                                     </Td>
                                     <Td>

@@ -6,6 +6,13 @@ import TBody from "@/Components/Table/TBody.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Th from "@/Components/Table/Th.vue";
 import Td from "@/Components/Table/Td.vue";
+
+defineProps({
+    posts: {
+        type: Array,
+        required: true,
+    },
+});
 </script>
 <template>
     <AdminLayout>
@@ -24,43 +31,47 @@ import Td from "@/Components/Table/Td.vue";
                             </Tr>
                         </THead>
                         <TBody>
-                            <!-- @foreach ($posts as $post) -->
-                            <Tr>
-                                <Td>
-                                    {{ $post->content }}
-                                </Td>
-                                <Td>
-                                    {{ $post->user->name }}
-                                </Td>
-                                <Td>
-                                    <a
-                                        href="{{ route('admin.comments.index', $post->id) }}"
-                                        class="font-medium text-blue-600 hover:underline"
-                                        >{{ $post->postComments->count() }}</a
-                                    >
-                                </Td>
-                                <Td>
-                                    {{ $post->postReacts->count() }}
-                                </Td>
-                                <Td>
-                                    {{ $post->postStats->count() }}
-                                </Td>
-                                <Td>
-                                    <form
-                                        action="{{ route('admin.posts.destroy', $post->id)}}"
-                                        method="post"
-                                    >
-                                        @csrf @method('DELETE')
-                                        <button
+                            <template v-for="post in posts" :key="post.id">
+                                <Tr>
+                                    <Td>
+                                        {{ post.content }}
+                                    </Td>
+                                    <Td>
+                                        {{ post.user.name }}
+                                    </Td>
+                                    <Td>
+                                        <a
+                                            :href="
+                                                route(
+                                                    'admin.comments.index',
+                                                    post.id
+                                                )
+                                            "
                                             class="font-medium text-blue-600 hover:underline"
-                                            type="submit"
+                                            >{{ post.post_comments.length }}</a
                                         >
-                                            Delete
-                                        </button>
-                                    </form>
-                                </Td>
-                            </Tr>
-                            <!-- @endforeach -->
+                                    </Td>
+                                    <Td>
+                                        {{ post.post_reacts.length }}
+                                    </Td>
+                                    <Td>
+                                        {{ post.post_stats.length }}
+                                    </Td>
+                                    <Td>
+                                        <form
+                                            action="{{ route('admin.posts.destroy', $post->id)}}"
+                                            method="post"
+                                        >
+                                            <button
+                                                class="font-medium text-blue-600 hover:underline"
+                                                type="submit"
+                                            >
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </Td>
+                                </Tr>
+                            </template>
                         </TBody>
                     </Table>
                 </div>

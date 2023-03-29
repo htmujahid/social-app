@@ -25,7 +25,7 @@ class PostController extends Controller
     {
         $posts = (new GetPosts())->execute();
 
-        return view('posts.index', [
+        return Inertia::render('Posts/Posts', [
             'posts' => $posts,
         ]);
     }

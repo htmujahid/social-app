@@ -19,7 +19,7 @@ class CommentController extends Controller
     {
         $comments = (new GetComments())->execute($request, $id);
 
-        return view('posts.comments.index', [
+        return Inertia('Posts/Comments/Comments', [
             'comments' => $comments,
         ]);
     }

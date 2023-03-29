@@ -11,10 +11,7 @@ class GetUsers
      */
     public function execute()
     {  
-        $users = User::with(['posts' =>
-        function ($query) {
-            $query->with('postComments');
-        } ])->get();
+        $users = User::with(['posts', 'postComments'])->get();
         
         return $users;
     }

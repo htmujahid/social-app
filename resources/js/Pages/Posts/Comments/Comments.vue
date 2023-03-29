@@ -6,6 +6,13 @@ import TBody from "@/Components/Table/TBody.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Th from "@/Components/Table/Th.vue";
 import Td from "@/Components/Table/Td.vue";
+
+defineProps({
+    comments: {
+        type: Object,
+        required: true,
+    },
+});
 </script>
 <template>
     <AdminLayout>
@@ -23,38 +30,45 @@ import Td from "@/Components/Table/Td.vue";
                             </Tr>
                         </THead>
                         <TBody>
-                            @foreach ($comments as $comment)
-                            <Tr>
-                                <Td>
-                                    {{ $comment->content }}
-                                </Td>
-                                <Td>
-                                    {{ $comment->user->name }}
-                                </Td>
-                                <Td>
-                                    {{ $comment->post->id }}
-                                </Td>
-                                <Td>
-                                    {{ $comment->postCommentReacts->where('type', 'upvote')->count() }}
-                                    /
-                                    {{ $comment->postCommentReacts->where('type', 'downvote')->count() }}
-                                </Td>
-                                <Td>
-                                    <form
-                                        action="{{ route('admin.comments.destroy', ['_', $comment->id])}}"
-                                        method="post"
-                                    >
-                                        @csrf @method('delete')
-                                        <button
-                                            class="font-medium text-blue-600 hover:underline"
-                                            type="submit"
+                            <template
+                                v-for="comment in comments"
+                                :key="comment.id"
+                            >
+                                <Tr>
+                                    <Td>
+                                        {{ comment.content }}
+                                    </Td>
+                                    <Td>
+                                        {{ comment.user.name }}
+                                    </Td>
+                                    <Td>
+                                        {{ comment.post.id }}
+                                    </Td>
+                                    <Td>
+                                        {{
+                                            comment.post_comment_upvotes.length
+                                        }}
+                                        /
+                                        {{
+                                            comment.post_comment_downvotes
+                                                .length
+                                        }}
+                                    </Td>
+                                    <Td>
+                                        <form
+                                            action="{{ route('admin.comments.destroy', ['_', comment.id])}}"
+                                            method="post"
                                         >
-                                            Delete
-                                        </button>
-                                    </form>
-                                </Td>
-                            </Tr>
-                            @endforeach
+                                            <button
+                                                class="font-medium text-blue-600 hover:underline"
+                                                type="submit"
+                                            >
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </Td>
+                                </Tr>
+                            </template>
                         </TBody>
                     </Table>
                 </div>
