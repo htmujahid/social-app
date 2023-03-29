@@ -6,6 +6,7 @@ use App\Actions\Summary;
 use App\Models\Post;
 use App\Models\PostComment;
 use App\Models\User;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -14,7 +15,7 @@ class DashboardController extends Controller
     {
         $summary = (new Summary())->execute(auth()->user());
         
-        return view('dashboard.index',$summary);
+        return Inertia::render('Dashboard',$summary);
     }
 
 

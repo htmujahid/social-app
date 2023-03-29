@@ -6,6 +6,7 @@ use App\Actions\User\DeleteUser;
 use App\Actions\User\GetUsers;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
     {
         $users = (new GetUsers())->execute();
         
-        return view('users.index', [
+        return Inertia::render('Users/Users', [
             'users' => $users,
         ]);
     }

@@ -15,16 +15,16 @@
                 </div>
                 <div>
                     <h2 class="font-semibold text-gray-900">
-                        {{ user_name }}
+                        {{ post.user.name }}
                     </h2>
                     <p class="text-xs font-light">
-                        {{ new Date(post_created_at).toLocaleString() }}
+                        {{ new Date(post.created_at).toLocaleString() }}
                     </p>
                 </div>
             </div>
             <button
                 @click="deletePost"
-                v-show="post_user_id === current_user_id"
+                v-show="post.user_id === current_user_id"
                 class="focus:outline-none"
             >
                 <DeleteIcon />
@@ -32,7 +32,7 @@
         </div>
         <div>
             <p class="mt-4 text-sm leading-relaxed text-gray-500">
-                {{ post_content }}
+                {{ post.content }}
             </p>
             <div
                 class="flex items-center overflow-x-auto max-w-[550px] scroll-smooth hide-scrollbar"
@@ -48,14 +48,14 @@
                 <button
                     ref="next-btn"
                     :class="{
-                        hidden: post_media.length <= 1,
+                        hidden: post.post_media.length <= 1,
                     }"
                     class="absolute right-0 z-10 p-2 rounded-full bg-gray-100/50"
                     @click="nextImage"
                 >
                     <RightArrowIcon />
                 </button>
-                <template v-for="media in post_media" :key="media">
+                <template v-for="media in post.post_media" :key="media">
                     <div class="shrink-0 w-full">
                         <img
                             :src="'/storage/' + media.path"
@@ -100,11 +100,11 @@
                 <Comment
                     :comment="comment"
                     :current_user_id="current_user_id"
-                    :post_id="post_id"
+                    :post_id="this.post.id"
                 />
             </template>
             <CreateComment
-                :post_id="post_id"
+                :post_id="this.post.id"
                 :current_user_id="current_user_id"
                 @comment-created="commentCreated"
             />
@@ -135,45 +135,9 @@ export default {
         RightArrowIcon,
     },
     props: {
-        post_id: {
-            type: Number,
-            required: true,
-        },
-        post_user_id: {
-            type: Number,
-            required: true,
-        },
-        post_content: {
-            type: String,
-            required: false,
-        },
-        user_name: {
-            type: String,
-            required: true,
-        },
-        user_media: {
+        post: {
             type: Object,
             required: true,
-        },
-        post_created_at: {
-            type: String,
-            required: true,
-        },
-        post_media: {
-            type: Array,
-            required: false,
-        },
-        post_comments: {
-            type: Array,
-            required: false,
-        },
-        post_likes: {
-            type: Array,
-            required: false,
-        },
-        post_stats: {
-            type: Array,
-            required: false,
         },
         current_user_id: {
             type: Number,
@@ -182,23 +146,24 @@ export default {
     },
     data() {
         return {
-            user_media_path: this.user_media[0]
-                ? this.user_media[0].path
-                : "users/default.jpg",
+            user_media_path:
+                this.post.user.user_media.length > 0
+                    ? this.post.user.user_media[0].path
+                    : "users/default.jpg",
             isCommentsActive: false,
             isLiked:
-                this.post_likes.filter(
+                this.post.post_reacts.filter(
                     (like) => like.user_id === this.current_user_id
                 ).length > 0,
             isViewed:
-                this.post_stats.filter(
+                this.post.post_stats.filter(
                     (stat) => stat.user_id === this.current_user_id
                 ).length > 0,
-            commentCount: this.post_comments.length,
-            likeCount: this.post_likes.length,
-            statCount: this.post_stats.length,
+            commentCount: this.post.post_comments.length,
+            likeCount: this.post.post_reacts.length,
+            statCount: this.post.post_stats.length,
             observer: null,
-            current_post_comments: this.post_comments,
+            current_post_comments: this.post.post_comments,
         };
     },
     mounted() {
@@ -214,7 +179,7 @@ export default {
                     setTimeout(() => {
                         if (entry.isIntersecting && !this.isViewed) {
                             axios
-                                .post(`/posts/${this.post_id}/stat`)
+                                .post(`/posts/${this.post.id}/stat`)
                                 .then(() => {
                                     this.isViewed = true;
                                     this.statCount++;
@@ -269,7 +234,7 @@ export default {
 
             if (this.isLiked) {
                 axios
-                    .post(`/posts/${this.post_id}/react`, {
+                    .post(`/posts/${this.post.id}/react`, {
                         type: "like",
                     })
                     .then(() => {
@@ -280,7 +245,7 @@ export default {
                     });
             } else {
                 axios
-                    .delete(`/posts/${this.post_id}/react`)
+                    .delete(`/posts/${this.post.id}/react`)
                     .then(() => {
                         this.likeCount--;
                     })
@@ -292,7 +257,7 @@ export default {
 
         deletePost() {
             axios
-                .delete(`/posts/${this.post_id}`)
+                .delete(`/posts/${this.post.id}`)
                 .then(() => {
                     window.location.reload();
                 })

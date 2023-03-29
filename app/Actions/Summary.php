@@ -22,9 +22,9 @@ class Summary
 
         return [
             'userOfWeek' => $userOfWeek,
-            'users' => $users,
-            'posts' => $posts,
-            'comments' => $comments
+            'users_count' => $users->count(),
+            'posts_count' => $posts->count(),
+            'comments_count' => $comments->count(),
         ];
     }
 }

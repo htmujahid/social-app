@@ -13,15 +13,15 @@ class GetComments
 
         if ($id == '_') {
             if (isset($query['user_id'])) {
-                $comments = PostComment::where('user_id', $query['user_id'])->get();
+                $comments = PostComment::where('user_id', $query['user_id'])->with('user', 'post', 'postCommentUpvotes', 'postCommentDownvotes')->get();
             } else {
-                $comments = PostComment::all();
+                $comments = PostComment::with('user', 'post', 'postCommentUpvotes', 'postCommentDownvotes')->get();
             }
         } else {
             if (isset($query['user_id'])) {
-                $comments = PostComment::where('user_id', $query['user_id'])->where('post_id', $id)->get();
+                $comments = PostComment::where('user_id', $query['user_id'])->where('post_id', $id)->with('user', 'post', 'postCommentUpvotes', 'postCommentDownvotes')->get();
             } else {
-                $comments = PostComment::where('post_id', $id)->get();
+                $comments = PostComment::where('post_id', $id)->with('user', 'post', 'postCommentUpvotes', 'postCommentDownvotes')->get();
             }
         }
         return $comments;

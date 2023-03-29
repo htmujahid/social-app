@@ -7,6 +7,8 @@ use App\Actions\User\Person\AddPerson;
 use App\Actions\User\Person\GetPendingPersons;
 use App\Actions\User\Person\GetPersons;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PersonController extends Controller
 {
@@ -16,9 +18,10 @@ class PersonController extends Controller
     public function index()
     {
         $persons = (new GetPersons())->execute();
-
-        return view('users.persons',[
+        $pending_persons = (new GetPendingPersons())->execute();
+        return Inertia::render('Users/Persons',[
             'persons' => $persons,
+            'pending_persons' => $pending_persons,
         ]);
     }
 
@@ -30,18 +33,6 @@ class PersonController extends Controller
         $friend = (new AddPerson())->execute($id);
 
         return $friend;
-    }
-
-    /**
-     * Show the pending friends.
-     */
-    public function pending()
-    {
-        $persons = (new GetPendingPersons())->execute();
-
-        return view('users.persons',[
-            'persons' => $persons,
-        ]);
     }
 
     /**

@@ -25,6 +25,16 @@ class PostComment extends Model
         return $this->hasMany(PostCommentReact::class);
     }
 
+    public function postCommentUpvotes()
+    {
+        return $this->hasMany(PostCommentReact::class)->where('type', 'upvote');
+    }
+
+    public function postCommentDownvotes()
+    {
+        return $this->hasMany(PostCommentReact::class)->where('type', 'downvote');
+    }
+
     public function post()
     {
         return $this->belongsTo(Post::class);

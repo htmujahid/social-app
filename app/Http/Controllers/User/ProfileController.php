@@ -3,26 +3,30 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use \App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserMedia;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request): Response
     {
         $user = User::with('userMedia')->where('id', $request->user()->id)->first();
 
-        return view('profile.edit', [
+        return Inertia::render('Profile/Edit', [
+            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'status' => session('status'),
             'user' => $user,
         ]);
     }
@@ -40,7 +44,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit');
     }
 
     /**
@@ -62,7 +66,7 @@ class ProfileController extends Controller
         }
 
         $request->validate([
-            'user-media' => ['required', 'image', 'max:1024'],
+            'user-media' => ['required', 'image'],
         ]);
 
         $file = $request->file('user-media');
@@ -84,7 +88,7 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
+        $request->validate([
             'password' => ['required', 'current-password'],
         ]);
 

@@ -13,6 +13,8 @@ use App\Models\PostReact;
 use App\Models\PostStat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PostController extends Controller
 {
@@ -23,7 +25,7 @@ class PostController extends Controller
     {
         $posts = (new GetPosts())->execute();
 
-        return view('posts.index', [
+        return Inertia::render('Posts/Posts', [
             'posts' => $posts,
         ]);
     }
@@ -32,11 +34,11 @@ class PostController extends Controller
      * Display resource related to the auth user.
      */
 
-    public function userPosts(String $id)
+    public function userPosts(String $id): Response
     {
         $posts = (new GetUserPosts())->execute($id);
 
-        return view('users.posts', [
+        return Inertia::render('Users/Posts', [
             'posts' => $posts,
         ]);
     }
