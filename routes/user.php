@@ -5,8 +5,9 @@ use App\Http\Controllers\User\FriendController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\PersonController;
 use App\Http\Controllers\Post\PostController;
-use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,3 +49,7 @@ Route::get('friends/pending-requests', [FriendController::class, 'pendingRequest
 Route::delete('friends/{id}/unfriend', [FriendController::class, 'unfriend'])->name('friends.unfriend');
 Route::post('friends/{id}/acceptfriend', [FriendController::class, 'acceptFriend'])->name('friends.acceptfriend');
 Route::get('friends', [FriendController::class, 'index'])->name('friends.index');
+
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
