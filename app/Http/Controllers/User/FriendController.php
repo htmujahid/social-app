@@ -4,22 +4,25 @@ namespace App\Http\Controllers\User;
 
 use App\Actions\User\Friend\AcceptFriend;
 use App\Actions\User\Friend\GetFriends;
-use App\Actions\User\Friend\GetPendingRequests;
+use App\Actions\User\Friend\GetUnrespondedRequests;
 use App\Actions\User\Friend\Unfriend;
-use App\Models\Friend;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class FriendController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $friends = (new GetFriends())->execute();
+        $unresponded_requests = (new GetUnrespondedRequests())->execute();
 
-        return view('users.friends', [
+        return Inertia::render('Users/Friends', [
             'friends' => $friends,
+            'unresponded_requests' => $unresponded_requests,
         ]);
         
     }
@@ -29,7 +32,7 @@ class FriendController extends Controller
      */
     public function pendingRequests()
     {
-        $pending_friend_requests = (new GetPendingRequests())->execute();
+        $pending_friend_requests = (new GetUnrespondedRequests())->execute();
 
         return view('users.friends', [
             'friends' => $pending_friend_requests,

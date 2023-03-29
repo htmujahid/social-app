@@ -26,7 +26,6 @@
                     class="bg-blue-500 rounded-xl px-4 py-2 font-medium text-white"
                     @click="addFriend"
                     v-else
-                    :test="person_type"
                 >
                     Add Friend
                 </button>

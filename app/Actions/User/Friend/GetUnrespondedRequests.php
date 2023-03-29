@@ -5,7 +5,7 @@ namespace App\Actions\User\Friend;
 use App\Models\Friend;
 use App\Models\User;
 
-class GetPendingRequests
+class GetUnrespondedRequests
 {
     /**
      * Accept a friend request

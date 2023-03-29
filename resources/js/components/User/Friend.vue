@@ -18,7 +18,7 @@
                 <button
                     class="bg-blue-500 rounded-xl px-4 py-2 font-medium text-white"
                     @click="confirmFriend"
-                    v-if="friend_type == 'confirm'"
+                    v-if="card_type == 'confirm'"
                 >
                     Confirm
                 </button>
@@ -42,7 +42,7 @@ export default {
             type: Object,
             required: true,
         },
-        friend_type: {
+        card_type: {
             type: String,
             required: false,
         },
