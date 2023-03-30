@@ -1,5 +1,5 @@
 export function validatePost(form) {
-    if (!form.content && !form.media.length) {
+    if (!form.content.trim() && !form.media.length) {
         return false;
     }
     return true;

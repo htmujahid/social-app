@@ -7,6 +7,7 @@ use App\Actions\User\Person\AddPerson;
 use App\Actions\User\Person\GetPendingPersons;
 use App\Actions\User\Person\GetPersons;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -31,7 +32,8 @@ class PersonController extends Controller
     public function addfriend(string $id)
     {
         $friend = (new AddPerson())->execute($id);
-        return $friend;
+
+        return Redirect::to('/persons');
     }
 
     /**
@@ -41,6 +43,6 @@ class PersonController extends Controller
     {
         $friend = (new CancelPendingPerson())->execute($id);
 
-        return $friend;
+        return Redirect::to('/persons');
     }
 }

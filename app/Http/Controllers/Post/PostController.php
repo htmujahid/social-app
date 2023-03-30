@@ -13,6 +13,7 @@ use App\Models\PostReact;
 use App\Models\PostStat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -52,7 +53,7 @@ class PostController extends Controller
     {
         $post = (new CreatePost())->execute($request);
 
-        return redirect()->route('home');
+        return Redirect::to('/');
     }
 
     /**
@@ -62,8 +63,7 @@ class PostController extends Controller
     {
         $post = (new DeletePost())->execute($id);
         
-        return $post;
-
+        return Redirect::to('/');
     }
 
     /**
@@ -72,6 +72,8 @@ class PostController extends Controller
     public function react(Request $request, string $id)
     {
         $post_react = (new ReactPost())->execute($request, $id);
+
+        return Redirect::to('/');
     }
 
     /**
@@ -80,7 +82,8 @@ class PostController extends Controller
     public function unreact(Request $request, string $id)
     {
         $post_unreact = (new UnreactPost())->execute($request, $id);
-        return $post_unreact;
+
+        return Redirect::to('/');
     }
     
     /**
@@ -88,7 +91,8 @@ class PostController extends Controller
      */
     public function stat(Request $request, string $id)
     {
-
         $post_stat = (new SetPostStat())->execute($request, $id);
+
+        return Redirect::to('/');
     }
 }
