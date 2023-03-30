@@ -15,5 +15,6 @@ class DeleteComment
             return PostComment::destroy($id);
         }
         return false;
+
     }
 }

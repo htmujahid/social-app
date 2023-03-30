@@ -7,7 +7,6 @@ use App\Http\Controllers\User\PersonController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,10 +39,12 @@ Route::post('comments/{id}/react', [CommentController::class, 'react'])->name('c
 Route::delete('comments/{id}/react', [CommentController::class, 'unreact'])->name('comments.unreact');
 Route::delete('posts/{post_id}/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 // persons connections handling
+Route::get('persons/pending', [PersonController::class, 'pending'])->name('persons.pending');
 Route::delete('persons/{id}/cancel', [PersonController::class, 'cancel'])->name('persons.cancel');
 Route::post('persons/{id}/addfriend', [PersonController::class, 'addfriend'])->name('persons.addfriend');
 Route::get('persons', [PersonController::class, 'index'])->name('persons.index');
 // friends connections handling
+Route::get('friends/pending-requests', [FriendController::class, 'pendingRequests'])->name('friends.pending-requests');
 Route::delete('friends/{id}/unfriend', [FriendController::class, 'unfriend'])->name('friends.unfriend');
 Route::post('friends/{id}/acceptfriend', [FriendController::class, 'acceptFriend'])->name('friends.acceptfriend');
 Route::get('friends', [FriendController::class, 'index'])->name('friends.index');

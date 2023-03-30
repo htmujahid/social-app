@@ -1,6 +1,5 @@
 <script setup>
 import UserLayout from "@/Layouts/UserLayout.vue";
-import PostCreate from "@/Components/Post/Create.vue";
 import PostShow from "@/Components/Post/Show.vue";
 
 defineProps({

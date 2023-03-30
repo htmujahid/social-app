@@ -28,13 +28,14 @@ class FriendController extends Controller
     }
 
     /**
+
      * delete of the requested resource.
      */
     public function unfriend(string $id)
     {
         $friend = (new Unfriend())->execute($id);
-
         return $friend;
+
     }
 
     /**
@@ -43,7 +44,6 @@ class FriendController extends Controller
     public function acceptFriend(string $id)
     {
         $friend = (new AcceptFriend())->execute($id);
-
         return $friend;
     }
 

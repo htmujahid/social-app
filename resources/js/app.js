@@ -26,10 +26,3 @@ createInertiaApp({
         color: "#4B5563",
     },
 });
-
-/**
- * Once the migration to inertiajs is completed, this support of legacy
- * components will be removed.
- */
-
-import "./vue";

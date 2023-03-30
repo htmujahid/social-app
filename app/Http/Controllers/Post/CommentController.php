@@ -9,6 +9,8 @@ use App\Actions\Comment\ReactComment;
 use App\Actions\Comment\UnreactComment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CommentController extends Controller
 {
@@ -19,20 +21,19 @@ class CommentController extends Controller
     {
         $comments = (new GetComments())->execute($request, $id);
 
-        return Inertia('Posts/Comments/Comments', [
+        return Inertia::render('Posts/Comments/Comments', [
             'comments' => $comments,
         ]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
-
         $comment = (new CreateComment())->execute($request);
 
-        return $comment;
+        return inertia($comment);
     }
 
     /**
@@ -61,8 +62,8 @@ class CommentController extends Controller
     public function unreact(Request $request, string $id)
     {
         $unreact = (new UnreactComment())->execute($request, $id);
-
         return $unreact;
+
     }
 
 }

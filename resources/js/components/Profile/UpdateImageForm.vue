@@ -1,3 +1,65 @@
+<script setup>
+import { reactive } from "vue";
+
+const props = defineProps({
+    user: {
+        type: Object,
+        required: true,
+    },
+});
+
+const userMediaPreview = ref(null);
+const userMediaError = ref(null);
+
+const userMedia = reactive({
+    path: getUserMediaPath(),
+});
+
+function getUserMediaPath() {
+    return props.user.user_media.length > 0
+        ? props.user.user_media[0].path
+        : "users/default.jpg";
+}
+
+function previewImage() {
+    const file = userMediaPreview.value.files[0];
+    const reader = new FileReader();
+    reader.addEventListener(
+        "load",
+        () => {
+            userMediaError.value.textContent = "";
+            userMediaPreview.value.src = reader.result;
+        },
+        false
+    );
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
+
+function submitForm() {
+    const userMediaFile = userMediaPreview.value.files[0];
+
+    if (!userMediaFile) {
+        userMediaError.value.textContent = "Please select an image.";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("user-media", userMediaFile);
+
+    axios
+        .post("/profile/image", formData)
+        .then(() => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+</script>
+
 <template>
     <section>
         <header>
@@ -50,61 +112,3 @@
         </form>
     </section>
 </template>
-
-<script>
-export default {
-    props: {
-        user: {
-            type: Object,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            user_media_path: this.user.user_media[0]
-                ? this.user.user_media[0].path
-                : "users/default.jpg",
-        };
-    },
-    methods: {
-        previewImage() {
-            const file = this.$refs.userMedia.files[0];
-            const reader = new FileReader();
-            reader.addEventListener(
-                "load",
-                () => {
-                    this.$refs.userMediaError.textContent = "";
-                    this.$refs.userMediaPreview.src = reader.result;
-                },
-                false
-            );
-
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-        },
-
-        submitForm() {
-            const userMedia = this.$refs.userMedia.files[0];
-
-            if (!userMedia) {
-                this.$refs.userMediaError.textContent =
-                    "Please select an image.";
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append("user-media", userMedia);
-
-            axios
-                .post("/profile/image", formData)
-                .then(() => {
-                    window.location.reload();
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-    },
-};
-</script>
