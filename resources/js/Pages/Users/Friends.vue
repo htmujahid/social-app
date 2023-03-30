@@ -1,5 +1,5 @@
 <script setup>
-import Friend from "@/components/User/Friend.vue";
+import Friend from "@/Components/User/Friend.vue";
 import UserLayout from "@/Layouts/UserLayout.vue";
 
 import { ref } from "vue";
@@ -66,10 +66,7 @@ function toggleTab(tab) {
                     v-for="unresponded_request in unresponded_requests"
                     :key="unresponded_request.id"
                 >
-                    <Friend
-                        :friend="unresponded_requests"
-                        card_type="confirm"
-                    />
+                    <Friend :friend="unresponded_request" card_type="confirm" />
                 </template>
             </div>
         </div>

@@ -1,7 +1,183 @@
+<script setup>
+import Comment from "../Comment/Show.vue";
+import CreateComment from "../Comment/Create.vue";
+import HeartIcon from "../Icons/Heart.vue";
+import CommentIcon from "../Icons/Comment.vue";
+import StatsIcon from "../Icons/Stats.vue";
+import DeleteIcon from "../Icons/Delete.vue";
+import LeftArrowIcon from "../Icons/Left.vue";
+import RightArrowIcon from "../Icons/Right.vue";
+import axios from "axios";
+import { defineComponent, onMounted, reactive, ref } from "vue";
+
+defineComponent({
+    components: {
+        Comment,
+        CreateComment,
+        HeartIcon,
+        CommentIcon,
+        StatsIcon,
+        DeleteIcon,
+        LeftArrowIcon,
+        RightArrowIcon,
+    },
+});
+const props = defineProps({
+    post: {
+        type: Object,
+        required: true,
+    },
+    current_user_id: {
+        type: Number,
+        required: true,
+    },
+});
+
+const postRef = ref(null);
+const prevBtn = ref(null);
+const nextBtn = ref(null);
+const imageCarousel = ref(null);
+
+const post = reactive({
+    user_media_path: getUserMediaPath(),
+    isLiked: isLiked(),
+    isViewed: isViewed(),
+    commentCount: props.post.post_comments.length,
+    likeCount: props.post.post_reacts.length,
+    statCount: props.post.post_stats.length,
+    observer: null,
+    current_post_comments: props.post.post_comments,
+    ...props.post,
+});
+
+const isCommentsActive = ref(false);
+
+function getUserMediaPath() {
+    return props.post.user.user_media.length > 0
+        ? props.post.user.user_media[0].path
+        : "users/default.jpg";
+}
+
+function isLiked() {
+    return (
+        props.post.post_reacts.filter(
+            (like) => like.user_id === props.current_user_id
+        ).length > 0
+    );
+}
+
+function isViewed() {
+    return (
+        props.post.post_stats.filter(
+            (stat) => stat.user_id === props.current_user_id
+        ).length > 0
+    );
+}
+
+const options = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 1,
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => {
+                if (entry.isIntersecting && !post.isViewed) {
+                    axios
+                        .post(`/posts/${props.post.id}/stat`)
+                        .then(() => {
+                            post.isViewed = true;
+                            post.statCount.value++;
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                }
+            }, 3000);
+        } else {
+            clearTimeout();
+        }
+    });
+}, options);
+
+onMounted(() => {
+    observer.observe(postRef.value);
+});
+
+function nextImage() {
+    imageCarousel.value.scrollLeft += imageCarousel.value.offsetWidth;
+    prevBtn.value.classList.remove("hidden");
+
+    if (
+        imageCarousel.value.scrollLeft + imageCarousel.value.offsetWidth >=
+        imageCarousel.value.scrollWidth
+    ) {
+        nextBtn.value.classList.add("hidden");
+    }
+}
+
+function prevImage() {
+    imageCarousel.value.scrollLeft -= imageCarousel.value.offsetWidth;
+
+    nextBtn.value.classList.remove("hidden");
+
+    if (imageCarousel.value.scrollLeft <= 0) {
+        prevBtn.value.classList.add("hidden");
+    }
+}
+
+function toggleComment() {
+    isCommentsActive.value = !isCommentsActive.value;
+}
+
+function likePost() {
+    post.isLiked = !post.isLiked;
+
+    if (post.isLiked) {
+        axios
+            .post(`/posts/${post.id}/react`, {
+                type: "like",
+            })
+            .then(() => {
+                post.likeCount++;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    } else {
+        axios
+            .delete(`/posts/${post.id}/react`)
+            .then(() => {
+                post.likeCount--;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+}
+
+function deletePost() {
+    axios
+        .delete(`/posts/${this.post.id}`)
+        .then(() => {
+            window.location.reload();
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+function commentCreated() {
+    window.location.reload();
+}
+</script>
+
 <template>
     <div
         class="duration-250 scale-100 rounded-lg border bg-white from-gray-700/50 via-transparent px-6 pt-6 pb-3 shadow-2xl shadow-gray-500/20 transition-all focus:outline focus:outline-2 focus:outline-red-500 motion-safe:hover:scale-[1.01]"
-        ref="post"
+        ref="postRef"
     >
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -9,7 +185,7 @@
                     class="flex h-12 w-12 items-center justify-center rounded-full bg-red-50"
                 >
                     <img
-                        :src="'/storage/' + user_media_path"
+                        :src="'/storage/' + post.user_media_path"
                         class="h-12 w-12 rounded-full bg-gray-300 object-cover"
                     />
                 </div>
@@ -36,17 +212,17 @@
             </p>
             <div
                 class="flex items-center overflow-x-auto max-w-[550px] scroll-smooth hide-scrollbar"
-                ref="image-carousel"
+                ref="imageCarousel"
             >
                 <button
-                    ref="prev-btn"
+                    ref="prevBtn"
                     class="absolute left-0 z-10 p-2 hidden rounded-full bg-gray-100/50"
                     @click="prevImage"
                 >
                     <LeftArrowIcon />
                 </button>
                 <button
-                    ref="next-btn"
+                    ref="nextBtn"
                     :class="{
                         hidden: post.post_media.length <= 1,
                     }"
@@ -70,10 +246,10 @@
         >
             <div class="w-full flex justify-center items-center gap-2">
                 <button class="" @click="likePost">
-                    <HeartIcon :active="!!isLiked" />
+                    <HeartIcon :active="!!post.isLiked" />
                 </button>
                 <span>
-                    {{ likeCount > 0 ? likeCount : "" }}
+                    {{ post.likeCount > 0 ? post.likeCount : "" }}
                 </span>
             </div>
             <div class="w-full flex justify-center items-center gap-2">
@@ -81,7 +257,7 @@
                     <CommentIcon />
                 </button>
                 <span class="">
-                    {{ commentCount > 0 ? commentCount : "" }}
+                    {{ post.commentCount > 0 ? post.commentCount : "" }}
                 </span>
             </div>
             <div class="w-full flex justify-center items-center gap-2">
@@ -89,12 +265,12 @@
                     <StatsIcon />
                 </p>
 
-                <span> {{ statCount > 0 ? statCount : "" }} </span>
+                <span> {{ post.statCount > 0 ? post.statCount : "" }} </span>
             </div>
         </div>
         <div class="mt-3 flex flex-col gap-2" v-show="isCommentsActive">
             <template
-                v-for="comment in current_post_comments"
+                v-for="comment in post.current_post_comments"
                 :key="comment.id"
             >
                 <Comment
@@ -111,164 +287,3 @@
         </div>
     </div>
 </template>
-
-<script>
-import Comment from "../Comment/Show.vue";
-import CreateComment from "../Comment/Create.vue";
-import HeartIcon from "../Icons/Heart.vue";
-import CommentIcon from "../Icons/Comment.vue";
-import StatsIcon from "../Icons/Stats.vue";
-import DeleteIcon from "../Icons/Delete.vue";
-import LeftArrowIcon from "../Icons/Left.vue";
-import RightArrowIcon from "../Icons/Right.vue";
-import axios from "axios";
-
-export default {
-    components: {
-        Comment,
-        CreateComment,
-        HeartIcon,
-        CommentIcon,
-        StatsIcon,
-        DeleteIcon,
-        LeftArrowIcon,
-        RightArrowIcon,
-    },
-    props: {
-        post: {
-            type: Object,
-            required: true,
-        },
-        current_user_id: {
-            type: Number,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            user_media_path:
-                this.post.user.user_media.length > 0
-                    ? this.post.user.user_media[0].path
-                    : "users/default.jpg",
-            isCommentsActive: false,
-            isLiked:
-                this.post.post_reacts.filter(
-                    (like) => like.user_id === this.current_user_id
-                ).length > 0,
-            isViewed:
-                this.post.post_stats.filter(
-                    (stat) => stat.user_id === this.current_user_id
-                ).length > 0,
-            commentCount: this.post.post_comments.length,
-            likeCount: this.post.post_reacts.length,
-            statCount: this.post.post_stats.length,
-            observer: null,
-            current_post_comments: this.post.post_comments,
-        };
-    },
-    mounted() {
-        const options = {
-            root: null,
-            rootMargin: "0px",
-            threshold: 1,
-        };
-
-        this.observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        if (entry.isIntersecting && !this.isViewed) {
-                            axios
-                                .post(`/posts/${this.post.id}/stat`)
-                                .then(() => {
-                                    this.isViewed = true;
-                                    this.statCount++;
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                });
-                        }
-                    }, 3000);
-                } else {
-                    clearTimeout();
-                }
-            });
-        }, options);
-
-        this.observer.observe(this.$refs.post);
-    },
-    methods: {
-        nextImage() {
-            const imageCarousel = this.$refs["image-carousel"];
-            imageCarousel.scrollLeft += imageCarousel.offsetWidth;
-            const prevBtn = this.$refs["prev-btn"];
-            prevBtn.classList.remove("hidden");
-
-            if (
-                imageCarousel.scrollLeft + imageCarousel.offsetWidth >=
-                imageCarousel.scrollWidth
-            ) {
-                const nextBtn = this.$refs["next-btn"];
-                nextBtn.classList.add("hidden");
-            }
-        },
-        prevImage() {
-            const imageCarousel = this.$refs["image-carousel"];
-            imageCarousel.scrollLeft -= imageCarousel.offsetWidth;
-
-            const nextBtn = this.$refs["next-btn"];
-            nextBtn.classList.remove("hidden");
-
-            if (imageCarousel.scrollLeft <= 0) {
-                const prevBtn = this.$refs["prev-btn"];
-                prevBtn.classList.add("hidden");
-            }
-        },
-
-        toggleComment() {
-            this.isCommentsActive = !this.isCommentsActive;
-        },
-
-        likePost() {
-            this.isLiked = !this.isLiked;
-
-            if (this.isLiked) {
-                axios
-                    .post(`/posts/${this.post.id}/react`, {
-                        type: "like",
-                    })
-                    .then(() => {
-                        this.likeCount++;
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            } else {
-                axios
-                    .delete(`/posts/${this.post.id}/react`)
-                    .then(() => {
-                        this.likeCount--;
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
-        },
-
-        deletePost() {
-            axios
-                .delete(`/posts/${this.post.id}`)
-                .then(() => {
-                    window.location.reload();
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        },
-
-        commentCreated() {
-            window.location.reload();
-        },
-    },
-};
-</script>

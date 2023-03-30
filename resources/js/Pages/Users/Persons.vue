@@ -1,5 +1,5 @@
 <script setup>
-import Person from "@/components/User/Person.vue";
+import Person from "@/Components/User/Person.vue";
 import UserLayout from "@/Layouts/UserLayout.vue";
 
 import { ref } from "vue";
@@ -48,9 +48,9 @@ function toggleTab(tab) {
                                 : 'bg-blue-500 text-white'
                         "
                         class="p-2 w-full"
-                        @click="toggleTab('unresponded')"
+                        @click="toggleTab('pending')"
                     >
-                        Unresponded Requests
+                        Pending Requests
                     </button>
                 </div>
             </div>
@@ -60,7 +60,7 @@ function toggleTab(tab) {
                     <Person :person="person" />
                 </template>
             </div>
-            <div v-if="activeTab === 'unresponded'">
+            <div v-if="activeTab === 'pending'">
                 <template
                     v-for="pending_person in pending_persons"
                     :key="pending_person.id"

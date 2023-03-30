@@ -1,3 +1,54 @@
+<script setup>
+import { reactive, ref } from "vue";
+
+const props = defineProps({
+    person: {
+        type: Object,
+        required: true,
+    },
+    card_type: {
+        type: String,
+        required: false,
+    },
+});
+
+const addButton = ref(null);
+const cancelButton = ref(null);
+
+const userMedia = reactive({
+    path: getUserMediaPath(),
+});
+
+function getUserMediaPath() {
+    return props.person.user_media.length > 0
+        ? props.person.user_media[0].path
+        : "users/default.jpg";
+}
+
+function addFriend() {
+    axios
+        .post(`/persons/${props.person.id}/addfriend`)
+        .then(() => {
+            addButton.value.innerText = "Request Sent";
+            addButton.value.disabled = true;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+function cancelRequest() {
+    axios
+        .delete(`/persons/${props.person.id}/cancel`)
+        .then(() => {
+            cancelButton.value.innerText = "Request Cancelled";
+            cancelButton.value.disabled = true;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+</script>
+
 <template>
     <div class="w-full sm:h-24 bg-gray-200 rounded-xl">
         <div
@@ -6,7 +57,7 @@
             <div class="h-20 w-20 rounded-full bg-gray-300">
                 <img
                     class="h-full w-full rounded-full bg-gray-300 object-cover"
-                    :src="'/storage/' + user_media_path"
+                    :src="'/storage/' + userMedia.path"
                     :alt="person.name"
                 />
             </div>
@@ -35,50 +86,3 @@
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    name: "Person",
-    props: {
-        person: {
-            type: Object,
-            required: true,
-        },
-        card_type: {
-            type: String,
-            required: false,
-        },
-    },
-    data() {
-        return {
-            user_media_path: this.person.user_media[0]
-                ? this.person.user_media[0].path
-                : "users/default.jpg",
-        };
-    },
-    methods: {
-        addFriend() {
-            axios
-                .post(`/persons/${this.person.id}/addfriend`)
-                .then(() => {
-                    this.$refs.addButton.innerText = "Request Sent";
-                    this.$refs.addButton.disabled = true;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        cancelRequest() {
-            axios
-                .delete(`/persons/${this.person.id}/cancel`)
-                .then(() => {
-                    this.$refs.cancelButton.innerText = "Request Cancelled";
-                    this.$refs.cancelButton.disabled = true;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-    },
-};
-</script>

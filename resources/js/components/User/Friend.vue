@@ -1,3 +1,54 @@
+<script setup>
+import { reactive, ref } from "vue";
+
+const props = defineProps({
+    friend: {
+        type: Object,
+        required: true,
+    },
+    card_type: {
+        type: String,
+        required: false,
+    },
+});
+
+const confirmButton = ref(null);
+const removeButton = ref(null);
+
+const userMedia = reactive({
+    path: getUserMediaPath(),
+});
+
+function getUserMediaPath() {
+    return props.friend.user_media.length > 0
+        ? props.friend.user_media[0].path
+        : "users/default.jpg";
+}
+
+function confirmFriend() {
+    axios
+        .post(`/friends/${props.friend.id}/acceptfriend`)
+        .then(() => {
+            confirmButton.value.innerText = "Friends";
+            confirmButton.value.disabled = true;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+function removeFriend() {
+    axios
+        .delete(`/friends/${props.friend.id}/unfriend`)
+        .then(() => {
+            removeButton.value.innerText = "Removed";
+            removeButton.value.disabled = true;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+</script>
+
 <template>
     <div class="w-full sm:h-24 bg-gray-200 rounded-xl">
         <div
@@ -6,7 +57,7 @@
             <div class="h-20 w-20 rounded-full bg-gray-300">
                 <img
                     class="h-full w-full rounded-full bg-gray-300 object-cover"
-                    :src="'/storage/' + user_media_path"
+                    :src="'/storage/' + userMedia.path"
                     :alt="friend.name"
                 />
             </div>
@@ -35,50 +86,3 @@
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    name: "Friend",
-    props: {
-        friend: {
-            type: Object,
-            required: true,
-        },
-        card_type: {
-            type: String,
-            required: false,
-        },
-    },
-    data() {
-        return {
-            user_media_path: this.friend.user_media[0]
-                ? this.friend.user_media[0].path
-                : "users/default.jpg",
-        };
-    },
-    methods: {
-        confirmFriend() {
-            axios
-                .post(`/friends/${this.friend.id}/acceptfriend`)
-                .then(() => {
-                    this.$refs.confirmButton.innerText = "Friends";
-                    this.$refs.confirmButton.disabled = true;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        removeFriend() {
-            axios
-                .delete(`/friends/${this.friend.id}/unfriend`)
-                .then(() => {
-                    this.$refs.removeButton.innerText = "Removed";
-                    this.$refs.removeButton.disabled = true;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-    },
-};
-</script>
