@@ -10,6 +10,7 @@ use App\Actions\Comment\UnreactComment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CommentController extends Controller
 {
@@ -28,12 +29,11 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
-
         $comment = (new CreateComment())->execute($request);
 
-        return $comment;
+        return inertia($comment);
     }
 
     /**

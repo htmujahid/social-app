@@ -4,6 +4,7 @@ import DownvoteIcon from "../Icons/Downvote.vue";
 import DeleteIcon from "../Icons/Delete.vue";
 import axios from "axios";
 import { defineComponent, reactive, ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
 
 defineComponent({
     components: {

@@ -1,11 +1,17 @@
 <script setup>
+import { useForm } from "@inertiajs/vue3";
 import { reactive, ref } from "vue";
 
 const post = reactive({
-    content: "",
-    media: [],
+    // content: "",
+    // media: [],
     baseUrl: window.location.origin,
     validationError: false,
+});
+
+const form = useForm({
+    content: "",
+    media: [],
 });
 
 const postMedia = ref(null);
@@ -16,7 +22,7 @@ function previewMedia() {
         const file = postMedia.value.files[i];
         const reader = new FileReader();
 
-        post.media.push(file);
+        form.media.push(file);
         reader.addEventListener(
             "load",
             function () {
@@ -34,13 +40,13 @@ function previewMedia() {
     }
 }
 function discardPost() {
-    post.content = "";
-    post.media = [];
+    form.content = "";
+    form.media = [];
     postMedia.value.value = "";
     postMediaPreview.value.innerHTML = "";
 }
 function validatePost() {
-    if (!post.content && !post.media.length) {
+    if (!form.content && !form.media.length) {
         return false;
     }
     return true;
@@ -55,23 +61,20 @@ function storePost() {
     }
 
     const formData = new FormData();
-    formData.append("content", post.content);
+    formData.append("content", form.content);
 
-    for (let i = 0; i < post.media.length; i++) {
-        formData.append(`media[${i}]`, post.media[i]);
+    for (let i = 0; i < form.media.length; i++) {
+        formData.append(`media[${i}]`, form.media[i]);
     }
-    axios
-        .post("/posts", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-        .then(() => {
-            window.location.reload();
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+
+    form.post(route("posts.store"), {
+        onFinish: () => {
+            form.content = "";
+            form.media = [];
+            postMedia.value.value = "";
+            postMediaPreview.value.innerHTML = "";
+        },
+    });
 }
 </script>
 
@@ -86,7 +89,7 @@ function storePost() {
                 rows="6"
                 class="w-full text-sm focus:outline-none focus:ring-0"
                 placeholder="What's on your mind?"
-                v-model="post.content"
+                v-model="form.content"
             ></textarea>
             <div class="flex flex-wrap gap-2" ref="postMediaPreview"></div>
             <input

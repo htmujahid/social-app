@@ -1,6 +1,6 @@
 <script setup>
-import axios from "axios";
-import { reactive } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { reactive, ref } from "vue";
 
 const props = defineProps({
     post_id: {
@@ -13,47 +13,42 @@ const props = defineProps({
     },
 });
 
-const comment = reactive({
+const validationError = ref(false);
+
+const form = useForm({
     content: "",
-    validationError: false,
+    post_id: props.post_id,
 });
 
-function createComment() {
-    if (comment.content === "") {
-        comment.validationError = true;
-        setInterval(() => {
-            comment.validationError = false;
+const submit = () => {
+    if (form.content === "") {
+        validationError.value = true;
+        setTimeout(() => {
+            validationError.value = false;
         }, 3000);
         return;
     }
-    axios
-        .post("/comments", {
-            content: comment.content,
-            post_id: props.post_id,
-        })
-        .then((response) => {
-            window.location.reload();
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
+    form.post(route("comments.store"), {
+        onFinish: () => form.reset(),
+    });
+};
 </script>
 
 <template>
-    <form @submit.prevent="createComment">
+    <form @submit.prevent="submit">
         <div class="flex gap-2 rounded border flex-col sm:flex-row">
             <textarea
                 type="text"
                 class="w-full text-sm rounded p-2.5 border-0 focus:outline-none focus:ring-0"
                 placeholder="write your comment here"
                 rows="1"
-                v-model="comment.content"
+                required
+                v-model="form.content"
             ></textarea>
             <button type="submit" class="test-sm px-3">Submit</button>
         </div>
         <p id="error">
-            <span v-show="comment.validationError" class="text-red-500">
+            <span v-show="validationError" class="text-red-500">
                 Please enter some content
             </span>
         </p>

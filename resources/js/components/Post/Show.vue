@@ -160,7 +160,7 @@ function likePost() {
 
 function deletePost() {
     axios
-        .delete(`/posts/${this.post.id}`)
+        .delete(`/posts/${post.id}`)
         .then(() => {
             window.location.reload();
         })
