@@ -1,5 +1,5 @@
 <template>
-    <form @submit="createComment">
+    <form @submit.prevent="createComment">
         <div class="flex gap-2 rounded border flex-col sm:flex-row">
             <textarea
                 type="text"

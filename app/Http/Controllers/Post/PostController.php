@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
 
+
 class PostController extends Controller
 {
     /**
@@ -39,6 +40,7 @@ class PostController extends Controller
         $posts = (new GetUserPosts())->execute($id);
 
         return Inertia::render('Users/Posts', [
+
             'posts' => $posts,
         ]);
     }
@@ -61,6 +63,7 @@ class PostController extends Controller
         $post = (new DeletePost())->execute($id);
         
         return $post;
+
     }
 
     /**
@@ -77,6 +80,7 @@ class PostController extends Controller
     public function unreact(Request $request, string $id)
     {
         $post_unreact = (new UnreactPost())->execute($request, $id);
+        return $post_unreact;
     }
     
     /**

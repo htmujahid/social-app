@@ -31,7 +31,6 @@ class PersonController extends Controller
     public function addfriend(string $id)
     {
         $friend = (new AddPerson())->execute($id);
-
         return $friend;
     }
 

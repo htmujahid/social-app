@@ -13,8 +13,7 @@ class DashboardController extends Controller
     
     public function index()
     {
-        $summary = (new Summary())->execute(auth()->user());
-        
+        $summary = (new Summary())->execute(auth()->user());        
         return Inertia::render('Dashboard',$summary);
     }
 
