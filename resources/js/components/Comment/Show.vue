@@ -2,7 +2,6 @@
 import UpvoteIcon from "@/Components/Icons/Upvote.vue";
 import DownvoteIcon from "@/Components/Icons/Downvote.vue";
 import DeleteIcon from "@/Components/Icons/Delete.vue";
-import axios from "axios";
 import { defineComponent, reactive, ref } from "vue";
 import {
     getUpvoteCount,
@@ -10,8 +9,8 @@ import {
     isUpvoted,
     isDownvoted,
 } from "@/Setup/Comment/utils";
-
 import { getUserMediaPath } from "@/Setup/User/utils";
+import { useForm } from "@inertiajs/vue3";
 
 defineComponent({
     components: {
@@ -53,73 +52,62 @@ const comment = reactive({
     ...props.comment,
 });
 
+const upvoteForm = useForm({
+    type: "upvote",
+});
+
+const downvoteForm = useForm({
+    type: "downvote",
+});
+
+const unvoteForm = useForm({});
+
+const deleteCommentForm = useForm({});
+
 function upvote() {
     if (comment.isUpvoted) {
-        axios
-            .delete(`/comments/${comment.id}/react`)
-            .then(() => {
-                comment.upvoteCount--;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        unvoteForm.delete(route("comments.unreact", comment.id), {
+            preserveScroll: true,
+            onSuccess: () => comment.upvoteCount--,
+        });
     } else {
-        axios
-            .post(`/comments/${comment.id}/react`, {
-                type: "upvote",
-            })
-            .then(() => {
-                if (comment.isDownvoted) {
-                    comment.downvoteCount--;
-                }
-                comment.isDownvoted = false;
-                comment.upvoteCount++;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (comment.isDownvoted) {
+            comment.isDownvoted = false;
+            comment.downvoteCount--;
+        }
+        upvoteForm.post(route("comments.react", comment.id), {
+            preserveScroll: true,
+            onSuccess: () => comment.upvoteCount++,
+        });
     }
     comment.isUpvoted = !comment.isUpvoted;
 }
 
 function downvote() {
     if (comment.isDownvoted) {
-        axios
-            .delete(`/comments/${comment.id}/react`)
-            .then(() => {
-                comment.downvoteCount--;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        unvoteForm.delete(route("comments.unreact", comment.id), {
+            preserveScroll: true,
+            onSuccess: () => comment.downvoteCount--,
+        });
     } else {
-        axios
-            .post(`/comments/${comment.id}/react`, {
-                type: "downvote",
-            })
-            .then(() => {
-                if (comment.isUpvoted) {
-                    comment.upvoteCount--;
-                }
-                comment.isUpvoted = false;
-                comment.downvoteCount++;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (comment.isUpvoted) {
+            comment.upvoteCount--;
+            comment.isUpvoted = false;
+        }
+        downvoteForm.post(route("comments.react", comment.id), {
+            preserveScroll: true,
+            onSuccess: () => comment.downvoteCount++,
+        });
     }
     comment.isDownvoted = !comment.isDownvoted;
 }
 
 function deleteComment() {
-    axios
-        .delete(`/posts/${props.post_id}/comments/${comment.id}`)
-        .then(() => {
-            window.location.reload();
+    deleteCommentForm.delete(
+        route("comments.destroy", [props.post_id, comment.id], {
+            preserveScroll: true,
         })
-        .catch((error) => {
-            console.log(error);
-        });
+    );
 }
 </script>
 

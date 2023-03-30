@@ -7,9 +7,7 @@ import StatsIcon from "../Icons/Stats.vue";
 import DeleteIcon from "../Icons/Delete.vue";
 import LeftArrowIcon from "../Icons/Left.vue";
 import RightArrowIcon from "../Icons/Right.vue";
-import axios from "axios";
-import { defineComponent, onMounted, reactive, ref } from "vue";
-<<<<<<< HEAD
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { getUserMediaPath } from "@/Setup/User/utils";
 import {
     getPostCommentsCount,
@@ -18,8 +16,7 @@ import {
     isViewed,
     isLiked,
 } from "@/Setup/Post/utils";
-=======
->>>>>>> main
+import { useForm } from "@inertiajs/vue3";
 
 defineComponent({
     components: {
@@ -50,7 +47,6 @@ const nextBtn = ref(null);
 const imageCarousel = ref(null);
 
 const post = reactive({
-<<<<<<< HEAD
     user_media_path: getUserMediaPath(props.post.user),
     isLiked: isLiked(props.post, props.current_user_id),
     isViewed: isViewed(props.post, props.current_user_id),
@@ -59,66 +55,39 @@ const post = reactive({
     statCount: getPostStatsCount(props.post),
     observer: null,
     comments: props.post.post_comments,
-=======
-    user_media_path: getUserMediaPath(),
-    isLiked: isLiked(),
-    isViewed: isViewed(),
-    commentCount: props.post.post_comments.length,
-    likeCount: props.post.post_reacts.length,
-    statCount: props.post.post_stats.length,
-    observer: null,
-    current_post_comments: props.post.post_comments,
->>>>>>> main
     ...props.post,
 });
 
+watch(
+    props,
+    () => {
+        console.log("rokkjfa");
+    },
+    { deep: true }
+);
+
 const isCommentsActive = ref(false);
 
-<<<<<<< HEAD
-=======
-function getUserMediaPath() {
-    return props.post.user.user_media.length > 0
-        ? props.post.user.user_media[0].path
-        : "users/default.jpg";
-}
-
-function isLiked() {
-    return (
-        props.post.post_reacts.filter(
-            (like) => like.user_id === props.current_user_id
-        ).length > 0
-    );
-}
-
-function isViewed() {
-    return (
-        props.post.post_stats.filter(
-            (stat) => stat.user_id === props.current_user_id
-        ).length > 0
-    );
-}
-
->>>>>>> main
 const options = {
     root: null,
     rootMargin: "0px",
     threshold: 1,
 };
 
+const postStatForm = useForm({});
+
 const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
             setTimeout(() => {
                 if (entry.isIntersecting && !post.isViewed) {
-                    axios
-                        .post(`/posts/${props.post.id}/stat`)
-                        .then(() => {
+                    postStatForm.post(route("posts.stat", post.id), {
+                        preserveScroll: true,
+                        onSuccess: () => {
                             post.isViewed = true;
-                            post.statCount.value++;
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
+                            post.statCount++;
+                        },
+                    });
                 }
             }, 3000);
         } else {
@@ -157,45 +126,32 @@ function toggleComment() {
     isCommentsActive.value = !isCommentsActive.value;
 }
 
+const reactForm = useForm({
+    type: "like",
+});
+
+const unReactForm = useForm({});
+
 function likePost() {
     post.isLiked = !post.isLiked;
 
     if (post.isLiked) {
-        axios
-            .post(`/posts/${post.id}/react`, {
-                type: "like",
-            })
-            .then(() => {
-                post.likeCount++;
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        reactForm.post(route("posts.react", post.id), {
+            preserveScroll: true,
+            onSuccess: () => post.likeCount++,
+        });
     } else {
-        axios
-            .delete(`/posts/${post.id}/react`)
-            .then(() => {
-                post.likeCount--;
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        unReactForm.delete(route("posts.unreact", post.id), {
+            preserveScroll: true,
+            onSuccess: () => post.likeCount--,
+        });
     }
 }
 
-function deletePost() {
-    axios
-        .delete(`/posts/${post.id}`)
-        .then(() => {
-            window.location.reload();
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-}
+const deletePostForm = useForm({});
 
-function commentCreated() {
-    window.location.reload();
+function deletePost() {
+    deletePostForm.delete(route("posts.destroy", post.id));
 }
 </script>
 
@@ -294,14 +250,7 @@ function commentCreated() {
             </div>
         </div>
         <div class="mt-3 flex flex-col gap-2" v-show="isCommentsActive">
-<<<<<<< HEAD
             <template v-for="comment in post.comments" :key="comment.id">
-=======
-            <template
-                v-for="comment in post.current_post_comments"
-                :key="comment.id"
-            >
->>>>>>> main
                 <Comment
                     :comment="comment"
                     :current_user_id="current_user_id"
@@ -311,7 +260,6 @@ function commentCreated() {
             <CreateComment
                 :post_id="this.post.id"
                 :current_user_id="current_user_id"
-                @comment-created="commentCreated"
             />
         </div>
     </div>

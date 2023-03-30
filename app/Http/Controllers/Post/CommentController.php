@@ -9,6 +9,7 @@ use App\Actions\Comment\ReactComment;
 use App\Actions\Comment\UnreactComment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,11 +30,11 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): Response
+    public function store(Request $request)
     {
         $comment = (new CreateComment())->execute($request);
 
-        return inertia($comment);
+        return Redirect::to('/');
     }
 
     /**
@@ -43,7 +44,7 @@ class CommentController extends Controller
     {
         $comment = (new DeleteComment())->execute($id);
 
-        return $comment;
+        return Redirect::to('/');
     }
 
     /**
@@ -53,7 +54,7 @@ class CommentController extends Controller
     {
         $react = (new ReactComment())->execute($request, $id);
 
-        return redirect()->route('home', ['_']);
+        return Redirect::to('/');
     }
 
     /**
@@ -62,8 +63,8 @@ class CommentController extends Controller
     public function unreact(Request $request, string $id)
     {
         $unreact = (new UnreactComment())->execute($request, $id);
-        return $unreact;
 
+        return Redirect::to('/');
     }
 
 }
