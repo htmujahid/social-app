@@ -9,6 +9,14 @@ import LeftArrowIcon from "../Icons/Left.vue";
 import RightArrowIcon from "../Icons/Right.vue";
 import axios from "axios";
 import { defineComponent, onMounted, reactive, ref } from "vue";
+import { getUserMediaPath } from "@/Setup/User/utils";
+import {
+    getPostCommentsCount,
+    getPostLikesCount,
+    getPostStatsCount,
+    isViewed,
+    isLiked,
+} from "@/Setup/Post/utils";
 
 defineComponent({
     components: {
@@ -39,40 +47,18 @@ const nextBtn = ref(null);
 const imageCarousel = ref(null);
 
 const post = reactive({
-    user_media_path: getUserMediaPath(),
-    isLiked: isLiked(),
-    isViewed: isViewed(),
-    commentCount: props.post.post_comments.length,
-    likeCount: props.post.post_reacts.length,
-    statCount: props.post.post_stats.length,
+    user_media_path: getUserMediaPath(props.post.user),
+    isLiked: isLiked(props.post, props.current_user_id),
+    isViewed: isViewed(props.post, props.current_user_id),
+    commentCount: getPostCommentsCount(props.post),
+    likeCount: getPostLikesCount(props.post),
+    statCount: getPostStatsCount(props.post),
     observer: null,
-    current_post_comments: props.post.post_comments,
+    comments: props.post.post_comments,
     ...props.post,
 });
 
 const isCommentsActive = ref(false);
-
-function getUserMediaPath() {
-    return props.post.user.user_media.length > 0
-        ? props.post.user.user_media[0].path
-        : "users/default.jpg";
-}
-
-function isLiked() {
-    return (
-        props.post.post_reacts.filter(
-            (like) => like.user_id === props.current_user_id
-        ).length > 0
-    );
-}
-
-function isViewed() {
-    return (
-        props.post.post_stats.filter(
-            (stat) => stat.user_id === props.current_user_id
-        ).length > 0
-    );
-}
 
 const options = {
     root: null,
@@ -269,10 +255,7 @@ function commentCreated() {
             </div>
         </div>
         <div class="mt-3 flex flex-col gap-2" v-show="isCommentsActive">
-            <template
-                v-for="comment in post.current_post_comments"
-                :key="comment.id"
-            >
+            <template v-for="comment in post.comments" :key="comment.id">
                 <Comment
                     :comment="comment"
                     :current_user_id="current_user_id"

@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from "vue";
+import { getUserMediaPath } from "@/Setup/User/utils";
 
 const props = defineProps({
     person: {
@@ -16,14 +17,8 @@ const addButton = ref(null);
 const cancelButton = ref(null);
 
 const userMedia = reactive({
-    path: getUserMediaPath(),
+    path: getUserMediaPath(props.person),
 });
-
-function getUserMediaPath() {
-    return props.person.user_media.length > 0
-        ? props.person.user_media[0].path
-        : "users/default.jpg";
-}
 
 function addFriend() {
     axios

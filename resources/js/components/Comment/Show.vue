@@ -1,10 +1,17 @@
 <script setup>
-import UpvoteIcon from "../Icons/Upvote.vue";
-import DownvoteIcon from "../Icons/Downvote.vue";
-import DeleteIcon from "../Icons/Delete.vue";
+import UpvoteIcon from "@/Components/Icons/Upvote.vue";
+import DownvoteIcon from "@/Components/Icons/Downvote.vue";
+import DeleteIcon from "@/Components/Icons/Delete.vue";
 import axios from "axios";
 import { defineComponent, reactive, ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import {
+    getUpvoteCount,
+    getDownvoteCount,
+    isUpvoted,
+    isDownvoted,
+} from "@/Setup/Comment/utils";
+
+import { getUserMediaPath } from "@/Setup/User/utils";
 
 defineComponent({
     components: {
@@ -30,46 +37,21 @@ const props = defineProps({
 });
 
 const showDeleteButton = ref(false);
+
 const comment = reactive({
-    upvoteCount: getUpvote().length,
-    downvoteCount: getDownvote().length,
-    isUpvoted: isUpvoted(),
-    isDownvoted: isDownvoted(),
-    user_media_path: getUserMediaPath(),
+    upvoteCount: getUpvoteCount(props.comment.post_comment_reacts),
+    downvoteCount: getDownvoteCount(props.comment.post_comment_reacts),
+    isUpvoted: isUpvoted(
+        props.comment.post_comment_reacts,
+        props.current_user_id
+    ),
+    isDownvoted: isDownvoted(
+        props.comment.post_comment_reacts,
+        props.current_user_id
+    ),
+    user_media_path: getUserMediaPath(props.comment.user),
     ...props.comment,
 });
-
-function getUpvote() {
-    return props.comment.post_comment_reacts.filter(
-        (react) => react.type === "upvote"
-    );
-}
-
-function getDownvote() {
-    return props.comment.post_comment_reacts.filter(
-        (react) => react.type === "downvote"
-    );
-}
-
-function isUpvoted() {
-    return props.comment.post_comment_reacts.filter(
-        (react) =>
-            react.type === "upvote" && react.user_id === props.current_user_id
-    ).length;
-}
-
-function isDownvoted() {
-    return props.comment.post_comment_reacts.filter(
-        (react) =>
-            react.type === "downvote" && react.user_id === props.current_user_id
-    ).length;
-}
-
-function getUserMediaPath() {
-    return props.comment.user.user_media[0]
-        ? props.comment.user.user_media[0].path
-        : "users/default.jpg";
-}
 
 function upvote() {
     if (comment.isUpvoted) {
