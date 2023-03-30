@@ -1,5 +1,6 @@
 <script setup>
 import { reactive } from "vue";
+import { getUserMediaPath } from "@/Setup/User/utils";
 
 const props = defineProps({
     user: {
@@ -12,14 +13,8 @@ const userMediaPreview = ref(null);
 const userMediaError = ref(null);
 
 const userMedia = reactive({
-    path: getUserMediaPath(),
+    path: getUserMediaPath(props.user),
 });
-
-function getUserMediaPath() {
-    return props.user.user_media.length > 0
-        ? props.user.user_media[0].path
-        : "users/default.jpg";
-}
 
 function previewImage() {
     const file = userMediaPreview.value.files[0];

@@ -9,6 +9,17 @@ import LeftArrowIcon from "../Icons/Left.vue";
 import RightArrowIcon from "../Icons/Right.vue";
 import axios from "axios";
 import { defineComponent, onMounted, reactive, ref } from "vue";
+<<<<<<< HEAD
+import { getUserMediaPath } from "@/Setup/User/utils";
+import {
+    getPostCommentsCount,
+    getPostLikesCount,
+    getPostStatsCount,
+    isViewed,
+    isLiked,
+} from "@/Setup/Post/utils";
+=======
+>>>>>>> main
 
 defineComponent({
     components: {
@@ -39,6 +50,16 @@ const nextBtn = ref(null);
 const imageCarousel = ref(null);
 
 const post = reactive({
+<<<<<<< HEAD
+    user_media_path: getUserMediaPath(props.post.user),
+    isLiked: isLiked(props.post, props.current_user_id),
+    isViewed: isViewed(props.post, props.current_user_id),
+    commentCount: getPostCommentsCount(props.post),
+    likeCount: getPostLikesCount(props.post),
+    statCount: getPostStatsCount(props.post),
+    observer: null,
+    comments: props.post.post_comments,
+=======
     user_media_path: getUserMediaPath(),
     isLiked: isLiked(),
     isViewed: isViewed(),
@@ -47,11 +68,14 @@ const post = reactive({
     statCount: props.post.post_stats.length,
     observer: null,
     current_post_comments: props.post.post_comments,
+>>>>>>> main
     ...props.post,
 });
 
 const isCommentsActive = ref(false);
 
+<<<<<<< HEAD
+=======
 function getUserMediaPath() {
     return props.post.user.user_media.length > 0
         ? props.post.user.user_media[0].path
@@ -74,6 +98,7 @@ function isViewed() {
     );
 }
 
+>>>>>>> main
 const options = {
     root: null,
     rootMargin: "0px",
@@ -269,10 +294,14 @@ function commentCreated() {
             </div>
         </div>
         <div class="mt-3 flex flex-col gap-2" v-show="isCommentsActive">
+<<<<<<< HEAD
+            <template v-for="comment in post.comments" :key="comment.id">
+=======
             <template
                 v-for="comment in post.current_post_comments"
                 :key="comment.id"
             >
+>>>>>>> main
                 <Comment
                     :comment="comment"
                     :current_user_id="current_user_id"
