@@ -7,6 +7,7 @@ use App\Actions\User\Friend\GetFriends;
 use App\Actions\User\Friend\GetUnrespondedRequests;
 use App\Actions\User\Friend\Unfriend;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,8 +35,8 @@ class FriendController extends Controller
     public function unfriend(string $id)
     {
         $friend = (new Unfriend())->execute($id);
-        return $friend;
 
+        return Redirect::to('/friends');
     }
 
     /**
@@ -44,7 +45,8 @@ class FriendController extends Controller
     public function acceptFriend(string $id)
     {
         $friend = (new AcceptFriend())->execute($id);
-        return $friend;
+
+        return Redirect::to('/friends');
     }
 
 }

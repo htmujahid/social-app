@@ -1,6 +1,6 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
     post_id: {
@@ -21,7 +21,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    if (form.content === "") {
+    if (form.content.trim() === "") {
         validationError.value = true;
         setTimeout(() => {
             validationError.value = false;
@@ -29,7 +29,10 @@ const submit = () => {
         return;
     }
     form.post(route("comments.store"), {
-        onFinish: () => form.reset(),
+        preserveScroll: true,
+        onSuccess: () => {
+            form.reset();
+        },
     });
 };
 </script>
