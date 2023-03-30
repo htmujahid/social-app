@@ -1,10 +1,9 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import { reactive, ref } from "vue";
+import { validatePost } from "@/Setup/Post/utils";
 
 const post = reactive({
-    // content: "",
-    // media: [],
     baseUrl: window.location.origin,
     validationError: false,
 });
@@ -16,6 +15,12 @@ const form = useForm({
 
 const postMedia = ref(null);
 const postMediaPreview = ref(null);
+
+function discardPost() {
+    form.reset();
+    postMedia.value.value = "";
+    postMediaPreview.value.innerHTML = "";
+}
 
 function previewMedia() {
     for (let i = 0; i < postMedia.value.files.length; i++) {
@@ -39,20 +44,9 @@ function previewMedia() {
         }
     }
 }
-function discardPost() {
-    form.content = "";
-    form.media = [];
-    postMedia.value.value = "";
-    postMediaPreview.value.innerHTML = "";
-}
-function validatePost() {
-    if (!form.content && !form.media.length) {
-        return false;
-    }
-    return true;
-}
+
 function storePost() {
-    if (!validatePost()) {
+    if (!validatePost(form)) {
         post.validationError = true;
         setInterval(() => {
             post.validationError = false;

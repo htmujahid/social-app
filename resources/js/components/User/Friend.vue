@@ -1,5 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
+import { getUserMediaPath } from "@/Setup/User/utils";
+import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     friend: {
@@ -16,36 +18,19 @@ const confirmButton = ref(null);
 const removeButton = ref(null);
 
 const userMedia = reactive({
-    path: getUserMediaPath(),
+    path: getUserMediaPath(props.friend),
 });
 
-function getUserMediaPath() {
-    return props.friend.user_media.length > 0
-        ? props.friend.user_media[0].path
-        : "users/default.jpg";
-}
+const confirmFriendForm = useForm({});
 
 function confirmFriend() {
-    axios
-        .post(`/friends/${props.friend.id}/acceptfriend`)
-        .then(() => {
-            confirmButton.value.innerText = "Friends";
-            confirmButton.value.disabled = true;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    confirmFriendForm.post(route("friends.acceptfriend", props.friend.id));
 }
+
+const removeFriendForm = useForm({});
+
 function removeFriend() {
-    axios
-        .delete(`/friends/${props.friend.id}/unfriend`)
-        .then(() => {
-            removeButton.value.innerText = "Removed";
-            removeButton.value.disabled = true;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    removeFriendForm.post(route("friends.unfriend", props.friend.id));
 }
 </script>
 

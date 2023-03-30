@@ -1,5 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
+import { getUserMediaPath } from "@/Setup/User/utils";
+import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     person: {
@@ -16,36 +18,19 @@ const addButton = ref(null);
 const cancelButton = ref(null);
 
 const userMedia = reactive({
-    path: getUserMediaPath(),
+    path: getUserMediaPath(props.person),
 });
 
-function getUserMediaPath() {
-    return props.person.user_media.length > 0
-        ? props.person.user_media[0].path
-        : "users/default.jpg";
-}
+const addFriendForm = useForm({});
 
 function addFriend() {
-    axios
-        .post(`/persons/${props.person.id}/addfriend`)
-        .then(() => {
-            addButton.value.innerText = "Request Sent";
-            addButton.value.disabled = true;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    addFriendForm.post(route("persons.addfriend", props.person.id));
 }
-function cancelRequest() {
-    axios
-        .delete(`/persons/${props.person.id}/cancel`)
-        .then(() => {
-            cancelButton.value.innerText = "Request Cancelled";
-            cancelButton.value.disabled = true;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+
+const cancelFriendRequestForm = useForm({});
+
+function cancelFriendRequest() {
+    cancelFriendRequestForm.delete(route("persons.cancel", props.person.id));
 }
 </script>
 
@@ -68,7 +53,7 @@ function cancelRequest() {
             <div class="">
                 <button
                     class="bg-red-500 rounded-xl px-4 py-2 font-medium text-white"
-                    @click="cancelRequest"
+                    @click="cancelFriendRequest"
                     v-if="card_type == 'cancel'"
                     ref="cancelButton"
                 >
