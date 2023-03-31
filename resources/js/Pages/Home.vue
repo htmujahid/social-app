@@ -27,6 +27,7 @@ defineOptions({
                 <div>
                     <PostShow
                         :post="post"
+                        :comments="post.post_comments"
                         :current_user_id="$page.props.auth.user.id"
                     />
                 </div>

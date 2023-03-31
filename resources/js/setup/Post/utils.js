@@ -5,10 +5,6 @@ export function validatePost(form) {
     return true;
 }
 
-export function getPostCommentsCount(post) {
-    return post.post_comments.length;
-}
-
 export function getPostLikesCount(post) {
     return post.post_reacts.length;
 }
