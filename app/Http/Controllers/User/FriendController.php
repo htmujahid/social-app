@@ -9,14 +9,13 @@ use App\Actions\User\Friend\Unfriend;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class FriendController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index()
     {
         $friends = (new GetFriends())->execute();
         $unresponded_requests = (new GetUnrespondedRequests())->execute();

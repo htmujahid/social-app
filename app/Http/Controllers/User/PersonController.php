@@ -9,7 +9,6 @@ use App\Actions\User\Person\GetPersons;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class PersonController extends Controller
 {

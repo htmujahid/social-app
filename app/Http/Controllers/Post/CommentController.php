@@ -44,6 +44,11 @@ class CommentController extends Controller
     {
         $comment = (new DeleteComment())->execute($id);
 
+        if(request()->route()->getName() == 'admin.comments.destroy')
+        {
+            return Redirect::route('admin.comments.index', '_');
+        }
+
         return Redirect::to('/');
     }
 

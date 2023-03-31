@@ -56,7 +56,6 @@ class ProfileController extends Controller
         $userMedia = UserMedia::where('user_id', $request->user()->id)->first();
 
         if ($userMedia) {
-            // delete the old image
             $path = $userMedia->path;
             $disk = Storage::disk('public');
             if ($disk->exists($path)) {

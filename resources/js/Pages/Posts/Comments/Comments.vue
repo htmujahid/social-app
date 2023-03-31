@@ -6,6 +6,7 @@ import TBody from "@/Components/Table/TBody.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Th from "@/Components/Table/Th.vue";
 import Td from "@/Components/Table/Td.vue";
+import { useForm } from "@inertiajs/vue3";
 
 defineProps({
     comments: {
@@ -13,6 +14,12 @@ defineProps({
         required: true,
     },
 });
+
+const deleteCommentForm = useForm({});
+
+const deleteComment = (postId, id) => {
+    deleteCommentForm.delete(route("admin.comments.destroy", [postId, id]));
+};
 </script>
 <template>
     <AdminLayout>
@@ -55,17 +62,17 @@ defineProps({
                                         }}
                                     </Td>
                                     <Td>
-                                        <form
-                                            action="{{ route('admin.comments.destroy', ['_', comment.id])}}"
-                                            method="post"
+                                        <button
+                                            class="font-medium text-blue-600 hover:underline"
+                                            @click="
+                                                deleteComment(
+                                                    comment.post.id,
+                                                    comment.id
+                                                )
+                                            "
                                         >
-                                            <button
-                                                class="font-medium text-blue-600 hover:underline"
-                                                type="submit"
-                                            >
-                                                Delete
-                                            </button>
-                                        </form>
+                                            Delete
+                                        </button>
                                     </Td>
                                 </Tr>
                             </template>

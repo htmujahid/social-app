@@ -63,6 +63,11 @@ class PostController extends Controller
     {
         $post = (new DeletePost())->execute($id);
         
+        if(request()->route()->getName() == 'admin.posts.destroy')
+        {
+            return Redirect::route('admin.posts.index');
+        }
+
         return Redirect::to('/');
     }
 

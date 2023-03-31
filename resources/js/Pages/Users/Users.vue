@@ -6,6 +6,7 @@ import TBody from "@/Components/Table/TBody.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Th from "@/Components/Table/Th.vue";
 import Td from "@/Components/Table/Td.vue";
+import { Link, useForm } from "@inertiajs/vue3";
 
 defineProps({
     users: {
@@ -13,6 +14,12 @@ defineProps({
         required: true,
     },
 });
+
+const userDeleteForm = useForm({});
+
+function deleteUser(id) {
+    userDeleteForm.delete(route("admin.users.destroy", id));
+}
 </script>
 <template>
     <AdminLayout>
@@ -43,10 +50,9 @@ defineProps({
                                         <!-- {{ user.getRoleNames() }} -->
                                     </Td>
                                     <Td>
-                                        <a
+                                        <Link
                                             :href="
                                                 route('admin.posts.index', [
-                                                    '_',
                                                     {
                                                         user_id: user.id,
                                                     },
@@ -55,33 +61,30 @@ defineProps({
                                             class="font-medium text-blue-600 hover:underline"
                                         >
                                             {{ user.posts.length }}
-                                        </a>
+                                        </Link>
                                     </Td>
                                     <Td>
-                                        <a
+                                        <Link
                                             :href="
                                                 route('admin.comments.index', [
                                                     '_',
-                                                    user.id,
+                                                    {
+                                                        user_id: user.id,
+                                                    },
                                                 ])
                                             "
                                             class="font-medium text-blue-600 hover:underline"
                                         >
                                             {{ user.post_comments.length }}
-                                        </a>
+                                        </Link>
                                     </Td>
                                     <Td>
-                                        <form
-                                            action="{{ route('admin.users.destroy', user.id)}}"
-                                            method="post"
+                                        <button
+                                            class="font-medium text-blue-600 hover:underline"
+                                            @click="deleteUser(user.id)"
                                         >
-                                            <button
-                                                class="font-medium text-blue-600 hover:underline"
-                                                type="submit"
-                                            >
-                                                Delete
-                                            </button>
-                                        </form>
+                                            Delete
+                                        </button>
                                     </Td>
                                 </Tr>
                             </template>

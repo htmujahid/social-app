@@ -6,6 +6,7 @@ import TBody from "@/Components/Table/TBody.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Th from "@/Components/Table/Th.vue";
 import Td from "@/Components/Table/Td.vue";
+import { Link, useForm } from "@inertiajs/vue3";
 
 defineProps({
     posts: {
@@ -13,6 +14,12 @@ defineProps({
         required: true,
     },
 });
+
+const deletePostForm = useForm({});
+
+const deletePost = (id) => {
+    deletePostForm.delete(route("admin.posts.destroy", id));
+};
 </script>
 <template>
     <AdminLayout>
@@ -40,7 +47,7 @@ defineProps({
                                         {{ post.user.name }}
                                     </Td>
                                     <Td>
-                                        <a
+                                        <Link
                                             :href="
                                                 route(
                                                     'admin.comments.index',
@@ -48,8 +55,8 @@ defineProps({
                                                 )
                                             "
                                             class="font-medium text-blue-600 hover:underline"
-                                            >{{ post.post_comments.length }}</a
-                                        >
+                                            >{{ post.post_comments.length }}
+                                        </Link>
                                     </Td>
                                     <Td>
                                         {{ post.post_reacts.length }}
@@ -58,17 +65,12 @@ defineProps({
                                         {{ post.post_stats.length }}
                                     </Td>
                                     <Td>
-                                        <form
-                                            action="{{ route('admin.posts.destroy', $post->id)}}"
-                                            method="post"
+                                        <button
+                                            class="font-medium text-blue-600 hover:underline"
+                                            @click="deletePost(post.id)"
                                         >
-                                            <button
-                                                class="font-medium text-blue-600 hover:underline"
-                                                type="submit"
-                                            >
-                                                Delete
-                                            </button>
-                                        </form>
+                                            Delete
+                                        </button>
                                     </Td>
                                 </Tr>
                             </template>

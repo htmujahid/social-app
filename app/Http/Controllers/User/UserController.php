@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Actions\User\DeleteUser;
 use App\Actions\User\GetUsers;
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 
