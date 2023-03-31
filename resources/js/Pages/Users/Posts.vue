@@ -8,23 +8,25 @@ defineProps({
         required: true,
     },
 });
+
+defineOptions({
+    layout: UserLayout,
+});
 </script>
 
 <template>
-    <UserLayout>
-        <div
-            class="relative bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white"
-        >
-            <div class="mx-auto grid max-w-2xl grid-cols-1 gap-y-4 p-6 lg:p-8">
-                <template v-for="post in posts" :key="post.id">
-                    <div>
-                        <PostShow
-                            :post="post"
-                            :current_user_id="$page.props.auth.user.id"
-                        />
-                    </div>
-                </template>
-            </div>
+    <div
+        class="relative bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white"
+    >
+        <div class="mx-auto grid max-w-2xl grid-cols-1 gap-y-4 p-6 lg:p-8">
+            <template v-for="post in posts" :key="post.id">
+                <div>
+                    <PostShow
+                        :post="post"
+                        :current_user_id="$page.props.auth.user.id"
+                    />
+                </div>
+            </template>
         </div>
-    </UserLayout>
+    </div>
 </template>

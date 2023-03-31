@@ -15,6 +15,10 @@ defineProps({
     },
 });
 
+defineOptions({
+    layout: AdminLayout,
+});
+
 const deletePostForm = useForm({});
 
 const deletePost = (id) => {
@@ -22,62 +26,60 @@ const deletePost = (id) => {
 };
 </script>
 <template>
-    <AdminLayout>
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <Table>
-                        <THead>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <Table>
+                    <THead>
+                        <Tr>
+                            <Th> Content </Th>
+                            <Th> User </Th>
+                            <Th> Comments </Th>
+                            <Th> Reacts </Th>
+                            <Th> Stats </Th>
+                            <Th> Action </Th>
+                        </Tr>
+                    </THead>
+                    <TBody>
+                        <template v-for="post in posts" :key="post.id">
                             <Tr>
-                                <Th> Content </Th>
-                                <Th> User </Th>
-                                <Th> Comments </Th>
-                                <Th> Reacts </Th>
-                                <Th> Stats </Th>
-                                <Th> Action </Th>
+                                <Td>
+                                    {{ post.content }}
+                                </Td>
+                                <Td>
+                                    {{ post.user.name }}
+                                </Td>
+                                <Td>
+                                    <Link
+                                        :href="
+                                            route(
+                                                'admin.comments.index',
+                                                post.id
+                                            )
+                                        "
+                                        class="font-medium text-blue-600 hover:underline"
+                                        >{{ post.post_comments.length }}
+                                    </Link>
+                                </Td>
+                                <Td>
+                                    {{ post.post_reacts.length }}
+                                </Td>
+                                <Td>
+                                    {{ post.post_stats.length }}
+                                </Td>
+                                <Td>
+                                    <button
+                                        class="font-medium text-blue-600 hover:underline"
+                                        @click="deletePost(post.id)"
+                                    >
+                                        Delete
+                                    </button>
+                                </Td>
                             </Tr>
-                        </THead>
-                        <TBody>
-                            <template v-for="post in posts" :key="post.id">
-                                <Tr>
-                                    <Td>
-                                        {{ post.content }}
-                                    </Td>
-                                    <Td>
-                                        {{ post.user.name }}
-                                    </Td>
-                                    <Td>
-                                        <Link
-                                            :href="
-                                                route(
-                                                    'admin.comments.index',
-                                                    post.id
-                                                )
-                                            "
-                                            class="font-medium text-blue-600 hover:underline"
-                                            >{{ post.post_comments.length }}
-                                        </Link>
-                                    </Td>
-                                    <Td>
-                                        {{ post.post_reacts.length }}
-                                    </Td>
-                                    <Td>
-                                        {{ post.post_stats.length }}
-                                    </Td>
-                                    <Td>
-                                        <button
-                                            class="font-medium text-blue-600 hover:underline"
-                                            @click="deletePost(post.id)"
-                                        >
-                                            Delete
-                                        </button>
-                                    </Td>
-                                </Tr>
-                            </template>
-                        </TBody>
-                    </Table>
-                </div>
+                        </template>
+                    </TBody>
+                </Table>
             </div>
         </div>
-    </AdminLayout>
+    </div>
 </template>

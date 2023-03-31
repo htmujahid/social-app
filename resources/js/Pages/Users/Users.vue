@@ -15,6 +15,10 @@ defineProps({
     },
 });
 
+defineOptions({
+    layout: AdminLayout,
+});
+
 const userDeleteForm = useForm({});
 
 function deleteUser(id) {
@@ -22,76 +26,74 @@ function deleteUser(id) {
 }
 </script>
 <template>
-    <AdminLayout>
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <Table>
-                        <THead>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <Table>
+                    <THead>
+                        <Tr>
+                            <Th> Name </Th>
+                            <Th> Email </Th>
+                            <Th> Role </Th>
+                            <Th> Posts </Th>
+                            <Th> Comments </Th>
+                            <Th> Action </Th>
+                        </Tr>
+                    </THead>
+                    <TBody>
+                        <template v-for="user in users" :key="user.id">
                             <Tr>
-                                <Th> Name </Th>
-                                <Th> Email </Th>
-                                <Th> Role </Th>
-                                <Th> Posts </Th>
-                                <Th> Comments </Th>
-                                <Th> Action </Th>
+                                <Td>
+                                    {{ user.name }}
+                                </Td>
+                                <Td>
+                                    {{ user.email }}
+                                </Td>
+                                <Td>
+                                    <!-- {{ user.getRoleNames() }} -->
+                                </Td>
+                                <Td>
+                                    <Link
+                                        :href="
+                                            route('admin.posts.index', [
+                                                {
+                                                    user_id: user.id,
+                                                },
+                                            ])
+                                        "
+                                        class="font-medium text-blue-600 hover:underline"
+                                    >
+                                        {{ user.posts.length }}
+                                    </Link>
+                                </Td>
+                                <Td>
+                                    <Link
+                                        :href="
+                                            route('admin.comments.index', [
+                                                '_',
+                                                {
+                                                    user_id: user.id,
+                                                },
+                                            ])
+                                        "
+                                        class="font-medium text-blue-600 hover:underline"
+                                    >
+                                        {{ user.post_comments.length }}
+                                    </Link>
+                                </Td>
+                                <Td>
+                                    <button
+                                        class="font-medium text-blue-600 hover:underline"
+                                        @click="deleteUser(user.id)"
+                                    >
+                                        Delete
+                                    </button>
+                                </Td>
                             </Tr>
-                        </THead>
-                        <TBody>
-                            <template v-for="user in users" :key="user.id">
-                                <Tr>
-                                    <Td>
-                                        {{ user.name }}
-                                    </Td>
-                                    <Td>
-                                        {{ user.email }}
-                                    </Td>
-                                    <Td>
-                                        <!-- {{ user.getRoleNames() }} -->
-                                    </Td>
-                                    <Td>
-                                        <Link
-                                            :href="
-                                                route('admin.posts.index', [
-                                                    {
-                                                        user_id: user.id,
-                                                    },
-                                                ])
-                                            "
-                                            class="font-medium text-blue-600 hover:underline"
-                                        >
-                                            {{ user.posts.length }}
-                                        </Link>
-                                    </Td>
-                                    <Td>
-                                        <Link
-                                            :href="
-                                                route('admin.comments.index', [
-                                                    '_',
-                                                    {
-                                                        user_id: user.id,
-                                                    },
-                                                ])
-                                            "
-                                            class="font-medium text-blue-600 hover:underline"
-                                        >
-                                            {{ user.post_comments.length }}
-                                        </Link>
-                                    </Td>
-                                    <Td>
-                                        <button
-                                            class="font-medium text-blue-600 hover:underline"
-                                            @click="deleteUser(user.id)"
-                                        >
-                                            Delete
-                                        </button>
-                                    </Td>
-                                </Tr>
-                            </template>
-                        </TBody>
-                    </Table>
-                </div>
+                        </template>
+                    </TBody>
+                </Table>
             </div>
         </div>
-    </AdminLayout>
+    </div>
 </template>

@@ -15,6 +15,10 @@ defineProps({
     },
 });
 
+defineOptions({
+    layout: AdminLayout,
+});
+
 const deleteCommentForm = useForm({});
 
 const deleteComment = (postId, id) => {
@@ -22,64 +26,54 @@ const deleteComment = (postId, id) => {
 };
 </script>
 <template>
-    <AdminLayout>
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <Table>
-                        <THead>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <Table>
+                    <THead>
+                        <Tr>
+                            <Th> Content </Th>
+                            <Th> User </Th>
+                            <Th> Post ID </Th>
+                            <Th> Upvotes / Downvotes </Th>
+                            <Th> Action </Th>
+                        </Tr>
+                    </THead>
+                    <TBody>
+                        <template v-for="comment in comments" :key="comment.id">
                             <Tr>
-                                <Th> Content </Th>
-                                <Th> User </Th>
-                                <Th> Post ID </Th>
-                                <Th> Upvotes / Downvotes </Th>
-                                <Th> Action </Th>
+                                <Td>
+                                    {{ comment.content }}
+                                </Td>
+                                <Td>
+                                    {{ comment.user.name }}
+                                </Td>
+                                <Td>
+                                    {{ comment.post.id }}
+                                </Td>
+                                <Td>
+                                    {{ comment.post_comment_upvotes.length }}
+                                    /
+                                    {{ comment.post_comment_downvotes.length }}
+                                </Td>
+                                <Td>
+                                    <button
+                                        class="font-medium text-blue-600 hover:underline"
+                                        @click="
+                                            deleteComment(
+                                                comment.post.id,
+                                                comment.id
+                                            )
+                                        "
+                                    >
+                                        Delete
+                                    </button>
+                                </Td>
                             </Tr>
-                        </THead>
-                        <TBody>
-                            <template
-                                v-for="comment in comments"
-                                :key="comment.id"
-                            >
-                                <Tr>
-                                    <Td>
-                                        {{ comment.content }}
-                                    </Td>
-                                    <Td>
-                                        {{ comment.user.name }}
-                                    </Td>
-                                    <Td>
-                                        {{ comment.post.id }}
-                                    </Td>
-                                    <Td>
-                                        {{
-                                            comment.post_comment_upvotes.length
-                                        }}
-                                        /
-                                        {{
-                                            comment.post_comment_downvotes
-                                                .length
-                                        }}
-                                    </Td>
-                                    <Td>
-                                        <button
-                                            class="font-medium text-blue-600 hover:underline"
-                                            @click="
-                                                deleteComment(
-                                                    comment.post.id,
-                                                    comment.id
-                                                )
-                                            "
-                                        >
-                                            Delete
-                                        </button>
-                                    </Td>
-                                </Tr>
-                            </template>
-                        </TBody>
-                    </Table>
-                </div>
+                        </template>
+                    </TBody>
+                </Table>
             </div>
         </div>
-    </AdminLayout>
+    </div>
 </template>
