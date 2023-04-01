@@ -10,7 +10,7 @@ class GetRelatedPosts
     /**
      * Get the related posts of the user.
      */
-    public function execute($user)
+    public function execute()
     {
         $current_friends = Friend::where(function ($query) {
             $query->where('user_id', auth()->id())

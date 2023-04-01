@@ -8,9 +8,9 @@ use Inertia\Response;
 
 class HomeController extends Controller
 {   
-    public function index(): Response
+    public function index(GetRelatedPosts $getRelatedPosts): Response
     {
-        $posts = (new GetRelatedPosts())->execute(auth()->user());
+        $posts = $getRelatedPosts->execute();
         return Inertia::render('Home',
             [
                 'posts' => $posts,

@@ -10,11 +10,18 @@ use Illuminate\Http\Request;
 
 class Requirements extends Controller
 {
+    public function __construct(
+        public DBMigration $dbMigration,
+        public RolePermission $rolePermission,
+        public SuperAdmin $superAdmin
+    )
+    {}
+
     public function index(Request $request)
     {
-        (new DBMigration)->execute();
-        (new RolePermission)->execute();
-        (new SuperAdmin)->execute();
+        $this->dbMigration->execute();
+        $this->rolePermission->execute();
+        $this->superAdmin->execute();
 
         $this->finalTouches();
 

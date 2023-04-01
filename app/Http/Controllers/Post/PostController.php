@@ -9,8 +9,6 @@ use App\Actions\Post\GetPosts;
 use App\Actions\Post\ReactPost;
 use App\Actions\Post\SetPostStat;
 use App\Actions\Post\UnreactPost;
-use App\Models\PostReact;
-use App\Models\PostStat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StorePostRequest;
@@ -24,9 +22,9 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(GetPosts $getPosts): Response
     {
-        $posts = (new GetPosts())->execute();
+        $posts = $getPosts->execute();
 
         return Inertia::render('Posts/Posts', [
             'posts' => $posts,
@@ -37,12 +35,11 @@ class PostController extends Controller
      * Display resource related to the auth user.
      */
 
-    public function userPosts(String $id): Response
+    public function userPosts(String $id, GetUserPosts $getUserPosts): Response
     {
-        $posts = (new GetUserPosts())->execute($id);
+        $posts = $getUserPosts->execute($id);
 
         return Inertia::render('Users/Posts', [
-
             'posts' => $posts,
         ]);
     }
@@ -50,9 +47,9 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(StorePostRequest $request, CreatePost $createPost)
     {
-        $post = (new CreatePost())->execute($request);
+        $post = $createPost->execute($request);
 
         return Redirect::to('/');
     }
@@ -60,9 +57,9 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, DeletePost $deletePost)
     {
-        $post = (new DeletePost())->execute($id);
+        $post = $deletePost->execute($id);
         
         if(request()->route()->getName() == 'admin.posts.destroy')
         {
@@ -75,9 +72,9 @@ class PostController extends Controller
     /**
      * add a react to the specified resource.
      */
-    public function react(Request $request, string $id)
+    public function react(Request $request, string $id, ReactPost $reactPost)
     {
-        $post_react = (new ReactPost())->execute($request, $id);
+        $post_react = $reactPost->execute($request, $id);
 
         return Redirect::to('/');
     }
@@ -85,9 +82,9 @@ class PostController extends Controller
     /**
      * remove a react from the specified resource.
      */
-    public function unreact(Request $request, string $id)
+    public function unreact(Request $request, string $id, UnreactPost $unreactPost)
     {
-        $post_unreact = (new UnreactPost())->execute($request, $id);
+        $post_unreact = $unreactPost->execute($request, $id);
 
         return Redirect::to('/');
     }
@@ -95,9 +92,9 @@ class PostController extends Controller
     /**
      * add a stat to the specified resource.
      */
-    public function stat(Request $request, string $id)
+    public function stat(Request $request, string $id, SetPostStat $setPostStat)
     {
-        $post_stat = (new SetPostStat())->execute($request, $id);
+        $post_stat = $setPostStat->execute($request, $id);
 
         return Redirect::to('/');
     }

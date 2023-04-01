@@ -11,9 +11,9 @@ use Inertia\Inertia;
 class DashboardController extends Controller
 {
     
-    public function index()
+    public function index(Summary $summary)
     {
-        $summary = (new Summary())->execute(auth()->user());        
+        $summary = $summary->execute();        
         return Inertia::render('Dashboard',$summary);
     }
 

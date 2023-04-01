@@ -15,10 +15,11 @@ class PersonController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(GetPersons $getPersons, GetPendingPersons $getPendingPersons)
     {
-        $persons = (new GetPersons())->execute();
-        $pending_persons = (new GetPendingPersons())->execute();
+        $persons = $getPersons->execute();
+        $pending_persons = $getPendingPersons->execute();
+        
         return Inertia::render('Users/Persons',[
             'persons' => $persons,
             'pending_persons' => $pending_persons,
@@ -28,9 +29,9 @@ class PersonController extends Controller
     /**
      * Add a friend to the user.
      */
-    public function addfriend(string $id)
+    public function addfriend(string $id, AddPerson $addPerson)
     {
-        $friend = (new AddPerson())->execute($id);
+        $person = $addPerson->execute($id);
 
         return Redirect::to('/persons');
     }
@@ -38,9 +39,9 @@ class PersonController extends Controller
     /**
      * delete the requested resource
      */
-    public function cancel(string $id)
+    public function cancel(string $id, CancelPendingPerson $cancelPendingPerson)
     {
-        $friend = (new CancelPendingPerson())->execute($id);
+        $person = $cancelPendingPerson->execute($id);
 
         return Redirect::to('/persons');
     }

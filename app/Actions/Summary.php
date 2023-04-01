@@ -11,7 +11,7 @@ class Summary
     /**
      * Get the summary 
      */
-    public function execute($user): array
+    public function execute(): array
     {
         $users = User::all();
         $posts = Post::all();

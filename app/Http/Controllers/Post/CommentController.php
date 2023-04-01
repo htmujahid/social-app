@@ -18,9 +18,9 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, String $id)
+    public function index(Request $request, String $id, GetComments $getComments)
     {
-        $comments = (new GetComments())->execute($request, $id);
+        $comments = $getComments->execute($request, $id);
 
         return Inertia::render('Posts/Comments/Comments', [
             'comments' => $comments,
@@ -30,9 +30,9 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommentRequest $request)
+    public function store(StoreCommentRequest $request, CreateComment $createComment)
     {
-        $comment = (new CreateComment())->execute($request);
+        $comment = $createComment->execute($request);
 
         return Redirect::to('/');
     }
@@ -40,9 +40,9 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $postId, string $id)
+    public function destroy(string $postId, string $id, DeleteComment $deleteComment)
     {
-        $comment = (new DeleteComment())->execute($id);
+        $comment = $deleteComment->execute($id);
 
         if(request()->route()->getName() == 'admin.comments.destroy')
         {
@@ -55,9 +55,9 @@ class CommentController extends Controller
     /**
      * React to a comment.
      */
-    public function react(Request $request, string $id)
+    public function react(Request $request, string $id, ReactComment $reactComment)
     {
-        $react = (new ReactComment())->execute($request, $id);
+        $react = $reactComment->execute($request, $id);
 
         return Redirect::to('/');
     }
@@ -65,10 +65,10 @@ class CommentController extends Controller
     /**
      * Unreact to a comment.
      */
-    public function unreact(Request $request, string $id)
+    public function unreact(Request $request, string $id, UnreactComment $unreactComment)
     {
-        $unreact = (new UnreactComment())->execute($request, $id);
-
+        $unreact = $unreactComment->execute($request, $id);
+        
         return Redirect::to('/');
     }
 

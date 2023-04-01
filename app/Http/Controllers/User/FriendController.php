@@ -15,10 +15,10 @@ class FriendController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(GetFriends $getFriends, GetUnrespondedRequests $getUnrespondedRequests)
     {
-        $friends = (new GetFriends())->execute();
-        $unresponded_requests = (new GetUnrespondedRequests())->execute();
+        $friends = $getFriends->execute();
+        $unresponded_requests = $getUnrespondedRequests->execute();
 
         return Inertia::render('Users/Friends', [
             'friends' => $friends,
@@ -31,9 +31,9 @@ class FriendController extends Controller
 
      * delete of the requested resource.
      */
-    public function unfriend(string $id)
+    public function unfriend(string $id, Unfriend $unfriend)
     {
-        $friend = (new Unfriend())->execute($id);
+        $friend = $unfriend->execute($id);
 
         return Redirect::to('/friends');
     }
@@ -41,9 +41,9 @@ class FriendController extends Controller
     /**
      * accept of the resource.
      */
-    public function acceptFriend(string $id)
+    public function acceptFriend(string $id, AcceptFriend $acceptFriend)
     {
-        $friend = (new AcceptFriend())->execute($id);
+        $friend = $acceptFriend->execute($id);
 
         return Redirect::to('/friends');
     }

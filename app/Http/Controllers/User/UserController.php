@@ -12,9 +12,9 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(GetUsers $getUsers)
     {
-        $users = (new GetUsers())->execute();
+        $users = $getUsers->execute();
         
         return Inertia::render('Users/Users', [
             'users' => $users,
@@ -24,9 +24,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, DeleteUser $deleteUser)
     {
-        $user = (new DeleteUser())->execute($id);
+        $user = $deleteUser->execute($id);
+        
         return redirect()->route('admin.users.index');
     }
 }
