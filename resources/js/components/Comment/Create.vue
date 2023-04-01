@@ -48,7 +48,14 @@ const submit = () => {
                 required
                 v-model="form.content"
             ></textarea>
-            <button type="submit" class="test-sm px-3">Submit</button>
+            <button
+                type="submit"
+                class="test-sm px-3"
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+            >
+                Submit
+            </button>
         </div>
         <p id="error">
             <span v-show="validationError" class="text-red-500">

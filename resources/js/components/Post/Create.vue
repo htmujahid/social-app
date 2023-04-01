@@ -104,6 +104,8 @@ function storePost() {
                 <button
                     type="submit"
                     class="w-full rounded py-1 hover:bg-gray-50"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing || !form.content"
                 >
                     Submit
                 </button>
