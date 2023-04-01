@@ -42,7 +42,7 @@ class Kernel extends HttpKernel
         ],
 
         'install' => [
-            // \App\Http\Middleware\CanInstall::class,
+            \App\Http\Middleware\CanInstall::class,
         ],
 
         'api' => [
