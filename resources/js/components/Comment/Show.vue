@@ -150,9 +150,9 @@ function deleteComment() {
                 </p>
             </div>
             <button
-                class="absolute -bottom-1 -left-2"
                 @click="deleteComment"
                 v-show="showDeleteButton && comment.user_id === current_user_id"
+                class="absolute -bottom-1 -left-2"
             >
                 <DeleteIcon />
             </button>

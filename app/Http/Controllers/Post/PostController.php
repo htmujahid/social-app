@@ -13,6 +13,7 @@ use App\Models\PostReact;
 use App\Models\PostStat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Post\StorePostRequest;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -49,7 +50,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         $post = (new CreatePost())->execute($request);
 

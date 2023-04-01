@@ -10,7 +10,6 @@ import RightArrowIcon from "../Icons/Right.vue";
 import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { getUserMediaPath } from "@/Setup/User/utils";
 import {
-    getPostCommentsCount,
     getPostLikesCount,
     getPostStatsCount,
     isViewed,
@@ -35,6 +34,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    comments: {
+        type: Array,
+        required: true,
+    },
     current_user_id: {
         type: Number,
         required: true,
@@ -50,21 +53,11 @@ const post = reactive({
     user_media_path: getUserMediaPath(props.post.user),
     isLiked: isLiked(props.post, props.current_user_id),
     isViewed: isViewed(props.post, props.current_user_id),
-    commentCount: getPostCommentsCount(props.post),
     likeCount: getPostLikesCount(props.post),
     statCount: getPostStatsCount(props.post),
     observer: null,
-    comments: props.post.post_comments,
     ...props.post,
 });
-
-watch(
-    props,
-    () => {
-        console.log("rokkjfa");
-    },
-    { deep: true }
-);
 
 const isCommentsActive = ref(false);
 
@@ -151,7 +144,9 @@ function likePost() {
 const deletePostForm = useForm({});
 
 function deletePost() {
-    deletePostForm.delete(route("posts.destroy", post.id));
+    deletePostForm.delete(route("posts.destroy", post.id), {
+        preserveScroll: true,
+    });
 }
 </script>
 
@@ -238,7 +233,7 @@ function deletePost() {
                     <CommentIcon />
                 </button>
                 <span class="">
-                    {{ post.commentCount > 0 ? post.commentCount : "" }}
+                    {{ comments.length > 0 ? comments.length : "" }}
                 </span>
             </div>
             <div class="w-full flex justify-center items-center gap-2">
@@ -250,7 +245,7 @@ function deletePost() {
             </div>
         </div>
         <div class="mt-3 flex flex-col gap-2" v-show="isCommentsActive">
-            <template v-for="comment in post.comments" :key="comment.id">
+            <template v-for="comment in comments" :key="comment.id">
                 <Comment
                     :comment="comment"
                     :current_user_id="current_user_id"

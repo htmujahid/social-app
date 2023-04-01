@@ -67,7 +67,7 @@ function toggleTab(tab) {
                 <Friend :friend="friend" card_type="" />
             </template>
         </div>
-        <div v-if="activeTab === 'unresponded'" class="flex flex-col gap-4">
+        <div v-if="activeTab === 'unresponded'" class="flex flex-col gap-6">
             <template
                 v-for="unresponded_request in unresponded_requests"
                 :key="unresponded_request.id"

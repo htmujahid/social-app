@@ -61,12 +61,12 @@ function toggleTab(tab) {
             </div>
         </div>
 
-        <div v-if="activeTab === 'persons'" class="flex flex-col gap-3">
+        <div v-if="activeTab === 'persons'" class="flex flex-col gap-6">
             <template v-for="person in persons" :key="person.id">
                 <Person :person="person" />
             </template>
         </div>
-        <div v-if="activeTab === 'pending'" class="flex flex-col gap-3">
+        <div v-if="activeTab === 'pending'" class="flex flex-col gap-6">
             <template
                 v-for="pending_person in pending_persons"
                 :key="pending_person.id"
