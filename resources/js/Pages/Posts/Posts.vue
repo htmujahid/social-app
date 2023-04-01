@@ -6,7 +6,7 @@ import TBody from "@/Components/Table/TBody.vue";
 import Tr from "@/Components/Table/Tr.vue";
 import Th from "@/Components/Table/Th.vue";
 import Td from "@/Components/Table/Td.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 
 defineProps({
     posts: {
@@ -26,6 +26,8 @@ const deletePost = (id) => {
 };
 </script>
 <template>
+    <Head title="Posts" />
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">

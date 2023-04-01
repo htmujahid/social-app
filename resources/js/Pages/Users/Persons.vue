@@ -1,6 +1,7 @@
 <script setup>
 import Person from "@/Components/User/Person.vue";
 import UserLayout from "@/Layouts/UserLayout.vue";
+import { Head } from "@inertiajs/vue3";
 
 import { ref } from "vue";
 
@@ -26,6 +27,8 @@ function toggleTab(tab) {
 }
 </script>
 <template>
+    <Head title="Persons" />
+
     <div class="mx-auto grid max-w-2xl grid-cols-1 gap-y-4 p-6 lg:p-8">
         <div
             class="flex flex-col sm:flex-row items-center w-full text-center rounded-lg overflow-hidden border"
@@ -58,12 +61,12 @@ function toggleTab(tab) {
             </div>
         </div>
 
-        <div v-if="activeTab === 'persons'">
+        <div v-if="activeTab === 'persons'" class="flex flex-col gap-3">
             <template v-for="person in persons" :key="person.id">
                 <Person :person="person" />
             </template>
         </div>
-        <div v-if="activeTab === 'pending'">
+        <div v-if="activeTab === 'pending'" class="flex flex-col gap-3">
             <template
                 v-for="pending_person in pending_persons"
                 :key="pending_person.id"

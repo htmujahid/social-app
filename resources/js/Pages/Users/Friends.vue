@@ -1,6 +1,7 @@
 <script setup>
 import Friend from "@/Components/User/Friend.vue";
 import UserLayout from "@/Layouts/UserLayout.vue";
+import { Head } from "@inertiajs/vue3";
 
 import { ref } from "vue";
 
@@ -27,6 +28,8 @@ function toggleTab(tab) {
 </script>
 
 <template>
+    <Head title="Friends" />
+
     <div class="mx-auto grid max-w-2xl grid-cols-1 gap-y-4 p-6 lg:p-8">
         <div
             class="flex flex-col sm:flex-row items-center w-full text-center rounded-lg overflow-hidden border"
@@ -59,12 +62,12 @@ function toggleTab(tab) {
             </div>
         </div>
 
-        <div v-if="activeTab === 'friends'">
+        <div v-if="activeTab === 'friends'" class="flex flex-col gap-4">
             <template v-for="friend in friends" :key="friend.id">
                 <Friend :friend="friend" card_type="" />
             </template>
         </div>
-        <div v-if="activeTab === 'unresponded'">
+        <div v-if="activeTab === 'unresponded'" class="flex flex-col gap-4">
             <template
                 v-for="unresponded_request in unresponded_requests"
                 :key="unresponded_request.id"

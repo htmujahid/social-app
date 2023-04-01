@@ -1,6 +1,7 @@
 <script setup>
 import UserLayout from "@/Layouts/UserLayout.vue";
 import PostShow from "@/Components/Post/Show.vue";
+import { Head } from "@inertiajs/vue3";
 
 defineProps({
     posts: {
@@ -15,6 +16,8 @@ defineOptions({
 </script>
 
 <template>
+    <Head title="Posts" />
+
     <div
         class="relative bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white"
     >
